@@ -65,6 +65,7 @@ export const WithdrawForm = ({ onSubmit }: WithdrawFormProps) => {
                                             onChange={handleAmountChange}
                                             coin={jackrampCoin}
                                             field={field}
+                                            className="border-[3px] border-slate-600 focus:border-slate-500 outline-0"
                                         />
                                     </motion.div>
 
@@ -88,6 +89,7 @@ export const WithdrawForm = ({ onSubmit }: WithdrawFormProps) => {
                                             disabled
                                             coin={defaultCoin}
                                             field={field}
+                                            className="border-[3px] border-slate-600"
                                         />
                                     </motion.div>
                                 </div>

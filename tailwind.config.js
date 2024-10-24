@@ -46,6 +46,10 @@ export default {
 					DEFAULT: 'hsl(var(--destructive))',
 					foreground: 'hsl(var(--destructive-foreground))'
 				},
+				zinc: {
+					DEFAULT: 'hsl(var(--zinc))',
+					foreground: 'hsl(var(--zinc-foreground))'
+				},
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',

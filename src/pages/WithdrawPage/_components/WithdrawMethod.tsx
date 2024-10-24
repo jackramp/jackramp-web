@@ -22,8 +22,8 @@ export const WithdrawMethod = ({
             <FormItem>
                 <Button
                     type="button"
-                    variant={field.value === value ? "default" : "outline"}
-                    className="w-full h-auto p-4 justify-start space-x-4 rounded-[20px]"
+                    variant={field.value === value ? "active" : "secondary"}
+                    className={"w-full h-auto p-4 justify-start space-x-4 rounded-[20px] border " + (field.value === value ? "" : " border-slate-600")}
                     onClick={() => onClick(value)}
                 >
                     <div className="text-left">

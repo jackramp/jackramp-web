@@ -52,7 +52,7 @@ function MobileNavbar() {
         <div className="flex flex-row items-center gap-2">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <Button className="px-3 py-1.5 w-[50px] h-[40px] shadow whitespace-nowrap transition-colors rounded-xl" variant={"default"}>
+              <Button className="px-3 py-1.5 w-[50px] h-[40px] shadow whitespace-nowrap transition-colors rounded-xl" variant={"ghost"}>
                 <Menu className="h-10 w-10" />
               </Button>
             </SheetTrigger>

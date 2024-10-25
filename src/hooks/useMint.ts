@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useAccount, useReadContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 import { ADDRESS_JACKUSD, ADDRESS_MOCKERC20 } from '@/constants/config';
 import { mockJackUSDABI } from '@/lib/abi/mockJackUSDABI';
-import { convertBigIntToNumber, toUSDCAmount } from '@/lib/utils';
 import { toast } from 'sonner';
 import { HexAddress } from '@/types';
 
@@ -24,7 +23,6 @@ export const useMint = () => {
 
     const {
         isLoading: isApprovalConfirming,
-        isSuccess: isApprovalConfirmed
     } = useWaitForTransactionReceipt({
         hash: approvalHash,
     });
@@ -48,26 +46,12 @@ export const useMint = () => {
 
     const handleMint = async (amount: string) => {
         try {
-            const amountInUSDC = toUSDCAmount(amount);
-            const currentAllowance = convertBigIntToNumber(allowance as bigint);
-            const requiredAmount = convertBigIntToNumber(amountInUSDC);
-
-            if (currentAllowance < requiredAmount) {
-                try {
-                    await writeApproval({
-                        abi: mockJackUSDABI,
-                        address: ADDRESS_MOCKERC20,
-                        functionName: 'approve',
-                        args: [ADDRESS_JACKUSD, BigInt(amount)],
-                    });
-                } catch (error: unknown) {
-                    throw new Error('Approval failed' + (error as Error).message);
-                }
-            
-                while (!isApprovalConfirmed) {
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                }
-            }
+            await writeApproval({
+                abi: mockJackUSDABI,
+                address: ADDRESS_MOCKERC20,
+                functionName: 'approve',
+                args: [ADDRESS_JACKUSD, BigInt(amount)],
+            });
 
             await writeMint({
                 abi: mockJackUSDABI,

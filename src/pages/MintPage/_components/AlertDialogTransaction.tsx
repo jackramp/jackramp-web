@@ -23,7 +23,7 @@ const AlertDialogTransactionComponent: React.FC<AlertDialogTransactionProps> = (
     };
 
     return (
-        <AlertDialog open={isOpen}>
+        <AlertDialog open={isOpen} onOpenChange={onClose}>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100 mb-4">

@@ -1,14 +1,66 @@
 import { BackgroundGradient } from "../ui/background-gradient";
 import { Button } from "../ui/button";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useERC20Balance } from "@/hooks/useERC20Balance";
+import { useAccount } from "wagmi";
+import { ADDRESS_JACKUSD } from "@/constants/config";
+import { HexAddress } from "@/types";
+import { jackrampCoin } from "@/constants/jackramp-coin";
+
+const buttonBaseStyles = "rounded-full hover:rounded-full";
+
+const ChainIcon = ({ iconUrl, name, background, size = 20 }: {
+    iconUrl?: string;
+    name?: string;
+    background?: string;
+    size?: number;
+}) => (
+    <div
+        style={{
+            background,
+            width: size,
+            height: size,
+            borderRadius: 999,
+            overflow: 'hidden',
+            marginRight: 4,
+        }}
+    >
+        {iconUrl && (
+            <img
+                alt={`${name ?? 'Chain'} icon`}
+                src={iconUrl}
+                style={{ width: size, height: size }}
+            />
+        )}
+    </div>
+);
+
+const GradientButton = ({ children, onClick, variant = 'outline' }: {
+    children: React.ReactNode;
+    onClick?: () => void;
+    variant?: 'outline' | 'ghost';
+}) => (
+    <div className="w-fit flex">
+        <BackgroundGradient className="rounded-full w-fit bg-background">
+            <Button
+                onClick={onClick}
+                variant={variant}
+                className={`${buttonBaseStyles} flex items-center`}
+            >
+                {children}
+            </Button>
+        </BackgroundGradient>
+    </div>
+);
 
 export function ButtonConnectWallet() {
-    return (
-        <ConnectButtonWalletComponents />
-    );
+    return <ConnectButtonWalletComponents />;
 }
 
 export const ConnectButtonWalletComponents = () => {
+    const { address } = useAccount();
+    const { balance, error } = useERC20Balance(address as HexAddress, ADDRESS_JACKUSD);
+
     return (
         <ConnectButton.Custom>
             {({
@@ -19,86 +71,69 @@ export const ConnectButtonWalletComponents = () => {
                 openConnectModal,
                 mounted,
             }) => {
-                const ready = mounted;
-                const connected =
-                    ready &&
-                    account &&
-                    chain
-                return (
-                    <div
-                        {...(!ready && {
-                            'aria-hidden': true,
-                            'style': {
+                if (!mounted) {
+                    return (
+                        <div
+                            aria-hidden="true"
+                            style={{
                                 opacity: 0,
                                 pointerEvents: 'none',
                                 userSelect: 'none',
-                            },
-                        })}
-                    >
-                        {(() => {
-                            if (!connected) {
-                                return (
-                                    <div className="w-fit flex">
-                                        <BackgroundGradient className="rounded-full w-fit bg-background">
-                                            <Button className="w-fit hover:rounded-full rounded-full" variant={"ghost"} onClick={openConnectModal}>Connect Wallet</Button>
-                                        </BackgroundGradient>
-                                    </div>
-                                );
-                            }
-                            if (chain.unsupported) {
-                                return (
-                                    <Button onClick={openChainModal}>
-                                        Wrong network
-                                    </Button>
-                                );
-                            }
-                            return (
-                                <div style={{ display: 'flex', gap: 12, zIndex: 50 }} className="w-fit flex-wrap">
-                                    <div className="w-fit flex">
-                                        <BackgroundGradient className="rounded-full w-fit bg-background">
-                                            <Button
-                                                onClick={openChainModal}
-                                                style={{ display: 'flex', alignItems: 'center' }}
-                                                variant={'outline'}
-                                                className="rounded-full hover:rounded-full"
-                                            >
-                                                {chain.hasIcon && (
-                                                    <div
-                                                        style={{
-                                                            background: chain.iconBackground,
-                                                            width: 12,
-                                                            height: 12,
-                                                            borderRadius: 999,
-                                                            overflow: 'hidden',
-                                                            marginRight: 4,
-                                                        }}
-                                                    >
-                                                        {chain.iconUrl && (
-                                                            <img
-                                                                alt={chain.name ?? 'Chain icon'}
-                                                                src={chain.iconUrl}
-                                                                style={{ width: 12, height: 12 }}
-                                                            />
-                                                        )}
-                                                    </div>
-                                                )}
-                                                {chain.name}
-                                            </Button>
-                                        </BackgroundGradient>
-                                    </div>
-                                    <div className="w-fit flex">
-                                        <BackgroundGradient className="rounded-full w-fit bg-background">
-                                            <Button onClick={openAccountModal} variant={'outline'} className="rounded-full hover:rounded-full">
-                                                {account.displayName}
-                                                {account.displayBalance
-                                                    ? ` (${account.displayBalance})`
-                                                    : ''}
-                                            </Button>
-                                        </BackgroundGradient>
-                                    </div>
-                                </div>
-                            );
-                        })()}
+                            }}
+                        />
+                    );
+                }
+
+                const connected = account && chain;
+
+                if (!connected) {
+                    return (
+                        <GradientButton onClick={openConnectModal} variant="ghost">
+                            Connect Wallet
+                        </GradientButton>
+                    );
+                }
+
+                if (chain?.unsupported) {
+                    return (
+                        <GradientButton onClick={openChainModal}>
+                            Wrong network
+                        </GradientButton>
+                    );
+                }
+
+                return (
+                    <div className="w-fit flex-wrap flex gap-3 z-50">
+                        <GradientButton>
+                            {jackrampCoin && (
+                                <ChainIcon
+                                    iconUrl={jackrampCoin.image}
+                                    name={jackrampCoin.name}
+                                    background={chain.iconBackground}
+                                />
+                            )}
+                            {error ? (
+                                'Error loading balance'
+                            ) : (
+                                balance ? (balance.toString()) : 'Loading...'
+                            )}
+                        </GradientButton>
+
+                        <GradientButton onClick={openChainModal}>
+                            {chain.hasIcon && (
+                                <ChainIcon
+                                    iconUrl={chain.iconUrl}
+                                    name={chain.name}
+                                    background={chain.iconBackground}
+                                />
+                            )}
+                            {chain.name}
+                        </GradientButton>
+
+                        <GradientButton onClick={openAccountModal}>
+                            {account.displayName}
+                            {account.displayBalance && ` (${account.displayBalance})`}
+                        </GradientButton>
                     </div>
                 );
             }}

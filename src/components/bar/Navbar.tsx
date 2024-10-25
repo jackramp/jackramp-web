@@ -41,7 +41,7 @@ function MobileNavbar() {
 
   return (
     <div
-      className={`fixed z-40 h-fit w-full py-5 lg:hidden transition-colors duration-200`}
+      className={`fixed z-40 h-fit w-full py-5 xl:hidden transition-colors duration-200`}
       style={{
         backgroundColor: hasScrolled ? 'rgba(128, 128, 128, 0.1)' : 'transparent',
         backdropFilter: hasScrolled ? 'blur(8px)' : 'none'
@@ -110,7 +110,7 @@ function DesktopNavbar() {
 
   return (
     <div
-      className={`fixed z-40 hidden h-fit w-full lg:block transition-colors duration-200`}
+      className={`fixed z-40 hidden h-fit w-full xl:block transition-colors duration-200`}
       style={{
         backgroundColor: hasScrolled ? 'rgba(128, 128, 128, 0.1)' : 'transparent',
         backdropFilter: hasScrolled ? 'blur(8px)' : 'none'

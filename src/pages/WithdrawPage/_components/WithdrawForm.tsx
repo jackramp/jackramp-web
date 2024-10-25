@@ -101,7 +101,6 @@ export const WithdrawForm = () => {
                                     value={amount}
                                     onChange={handleAmountChange}
                                     coin={jackrampCoin}
-                                    maxDecimals={USDC_DECIMALS}
                                 />
                             </motion.div>
                         </div>

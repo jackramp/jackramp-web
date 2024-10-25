@@ -21,7 +21,7 @@ interface FormData {
     confirmed: boolean;
 }
 
-export const WithdrawForm = () => {
+export const WithdrawForm = (props: any) => {
     const [amount, setAmount] = useState("0");
     const { address } = useAccount();
     const { balance, loading: balanceLoading } = useERC20Balance(address as HexAddress, ADDRESS_JACKUSD);
@@ -88,7 +88,7 @@ export const WithdrawForm = () => {
 
     return (
         <>
-            <Form {...form}>
+            <Form {...form} {...props}>
                 <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
                     <div className="space-y-4">
                         <div className="flex relative flex-col h-fit w-auto gap-2">

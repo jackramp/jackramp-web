@@ -1,21 +1,11 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MintForm } from "./MintForm";
 
-export interface MintData {
-    amount: string;
-    coin: string;
-    method: string;
-}
-
 export const MintComponent = () => {
     const [selectedTab, setSelectedTab] = useState("request");
-
-    const onSubmit = useCallback((data: MintData) => {
-        console.log(data);
-    }, []);
 
     return (
         <AnimatePresence>
@@ -60,7 +50,7 @@ export const MintComponent = () => {
                         <Card className="sm:min-w-[500px] rounded-[30px] border-none outline-none">
                             <CardContent className="p-10">
                                 {selectedTab === "request" ? (
-                                    <MintForm onSubmit={onSubmit} />
+                                    <MintForm />
                                 ) : (
                                     <div>Your history content goes here.</div> // Replace this with your actual history content
                                 )}

@@ -4,6 +4,8 @@ import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit'
 
 import { config } from './lib/wagmi'
 import Navbar from './components/bar/Navbar';
+import { holesky } from 'viem/chains';
+import { Toaster } from 'sonner';
 const queryClient = new QueryClient();
 
 export const CustomRainbowContext = ({ children }: { children: React.ReactNode }) => {
@@ -17,6 +19,7 @@ export const CustomRainbowContext = ({ children }: { children: React.ReactNode }
                 overlayBlur: 'small',
             })}
             modalSize='compact'
+            initialChain={holesky}
         >
             {children}
         </RainbowKitProvider>
@@ -28,6 +31,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <WagmiProvider config={config}>
             <QueryClientProvider client={queryClient}>
                 <CustomRainbowContext>
+                    <Toaster toastOptions={{ duration: 3000 }} />
                     <Navbar />
                     {children}
                 </CustomRainbowContext>

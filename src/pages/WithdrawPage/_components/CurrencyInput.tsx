@@ -39,8 +39,7 @@ export const CurrencyInput = ({
         />
         {coin && (
             <Button
-            className="w-auto h-[80%] absolute top-1/2 left-2 -translate-y-1/2 rounded-xl text-white 
-            bg-secondary/80 hover:bg-gray-700 shadow-none"
+            className="w-auto h-[80%] absolute top-1/2 left-2 -translate-y-1/2 rounded-xl text-white bg-secondary/80 hover:bg-gray-700 shadow-none"
             variant="zinc"
             >
                 <img

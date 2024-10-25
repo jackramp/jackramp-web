@@ -1,8 +1,14 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { USDC_DECIMALS } from "@/constants/config";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
+}
+
+export function formatterBigInt(num: bigint): string {
+  const formatted = (Number(num) / 1_000_000_000_000_000_000).toFixed(18).replace('.', ',');
+  return formatted;
 }
 
 export function formatAddress(inputString: string): string {
@@ -14,11 +20,11 @@ export function formatAddress(inputString: string): string {
 }
 
 export function convertBigIntToNumber(bigIntValue: bigint): number {
-  return Number(bigIntValue) / 1_000_000;
+  return Number(bigIntValue) / 1_000_000_000_000_000_000;
 }
 
 export function convertNumberToBigInt(num: number): bigint {
-  return BigInt(num * 1_000_000);
+  return BigInt(num * 1_000_000_000_000_000_000);
 }
 
 export function convertTimestampToDate(timestamp: number): string {
@@ -35,3 +41,10 @@ export function convertTimestampToDate(timestamp: number): string {
 
   return date.toLocaleString('en-US', options);
 }
+
+export const toUSDCAmount = (amount: string): bigint => {
+  const cleanAmount = amount.replace(/,/g, '');
+  const [whole, fraction = ""] = cleanAmount.split('.');
+  const paddedFraction = fraction.padEnd(USDC_DECIMALS, '0').slice(0, USDC_DECIMALS);
+  return BigInt(whole + paddedFraction);
+};

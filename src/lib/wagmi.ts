@@ -6,6 +6,7 @@ import {
     optimism,
     polygon,
     sepolia,
+    holesky
 } from 'wagmi/chains';
 
 export const config = getDefaultConfig({
@@ -16,6 +17,7 @@ export const config = getDefaultConfig({
         polygon,
         optimism,
         arbitrum,
+        holesky,
         base,
         ...(import.meta.env.VITE_ENABLE_TESTNETS === 'true' ? [sepolia] : []),
     ],

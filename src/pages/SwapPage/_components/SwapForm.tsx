@@ -112,6 +112,7 @@ export const SwapForm = ({ onSubmit }: SwapFormProps) => {
                                             onChange={handleAmountChange}
                                             coin={selectedCoin}
                                             field={field}
+                                            className="border-[3px] border-slate-600 focus:border-slate-500 outline-0"
                                         />
                                         <CurrencySelect
                                             selectedCoin={selectedCoin}
@@ -139,6 +140,7 @@ export const SwapForm = ({ onSubmit }: SwapFormProps) => {
                                             disabled
                                             coin={selectedCoinTarget}
                                             field={field}
+                                            className="border-[3px] border-slate-600"
                                         />
                                         <CurrencySelect
                                             selectedCoin={selectedCoinTarget}

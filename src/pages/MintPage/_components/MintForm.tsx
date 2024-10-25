@@ -12,7 +12,7 @@ import { useERC20Balance } from "@/hooks/useERC20Balance";
 import { HexAddress } from "@/types";
 import { ADDRESS_MOCKERC20, USDC_DECIMALS } from "@/constants/config";
 import { Label } from "@/components/ui/label";
-import { AlertDialogTransaction } from "./AlertDialogTransaction";
+import { AlertDialogTransaction } from "../../WithdrawPage/_components/AlertDialogTransaction";
 import { useMint } from "@/hooks/useMint";
 import { convertBigIntToNumber, toUSDCAmount } from "@/lib/utils";
 import { toast } from "sonner";
@@ -169,7 +169,7 @@ export const MintForm = () => {
                             className="w-full rounded-xl"
                             disabled={isSubmitDisabled}
                         >
-                            {isMintPending || isApprovalPending ? 'Minting...' : 'Mint'}
+                            {isMintPending || isApprovalPending || isMintConfirming || isApprovalConfirming ? 'Minting...' : 'Mint'}
                         </Button>
                         {insufficientBalance && (
                             <Label className="text-red-500 text-sm font-medium">

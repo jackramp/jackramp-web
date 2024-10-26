@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -7,11 +7,12 @@ import { defaultCoin } from "@/constants/default-coin";
 import { CurrencyInput } from "./CurrencyInput";
 import { useAccount } from "wagmi";
 import { ADDRESS_MOCKERC20 } from "@/constants/config";
-import { AlertDialogTransaction } from "../../WithdrawPage/_components/AlertDialogTransaction";
 import { useMint } from "@/hooks/useMint";
 import { toast } from "sonner";
 import { useInsufficientBalance } from "@/hooks/useInsufficientBalance";
 import { HexAddress } from "@/types";
+import { LoadingTransaction } from "@/components/loader/LoadingTransaction";
+import { SuccessDialog } from "./SuccessDialog";
 
 interface FormData {
     confirmed: boolean;
@@ -20,7 +21,8 @@ interface FormData {
 export const MintForm = () => {
     const [amount, setAmount] = useState("");
     const { address } = useAccount();
-    
+    const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+
     const {
         insufficientBalance,
     } = useInsufficientBalance(
@@ -30,14 +32,14 @@ export const MintForm = () => {
     );
 
     const {
-        isAlertOpen,
         mintHash,
         isApprovalPending,
         isMintPending,
         isApprovalConfirming,
         isMintConfirming,
         allowance,
-        handleMint
+        handleMint,
+        isMintConfirmed
     } = useMint();
 
     const form = useForm<FormData>({
@@ -48,11 +50,19 @@ export const MintForm = () => {
         setAmount(value);
     }, []);
 
+    useEffect(() => {
+        if (isMintConfirmed && !isMintConfirming) {
+            setShowSuccessDialog(true);
+            form.reset();
+        }
+    }, [isMintConfirming, isMintConfirmed, form]);
+
     const handleSubmit = useCallback(async () => {
         if (insufficientBalance) {
             toast.error('Invalid amount or not enough balance!');
             return;
         }
+        setShowSuccessDialog(false);
         await handleMint(amount);
     }, [amount, insufficientBalance, handleMint]);
 
@@ -76,20 +86,6 @@ export const MintForm = () => {
         ]
     );
 
-    const handleAlertClose = useCallback(() => {
-        if (isMintPending || isMintConfirming) {
-            toast.dismiss();
-        }
-
-        if (isApprovalPending || isApprovalConfirming) {
-            toast.dismiss();
-        }
-
-        if (isAlertOpen) {
-            form.reset();
-        }
-    }, [form, isMintPending, isMintConfirming, isApprovalPending, isApprovalConfirming, isAlertOpen]);
-
     const buttonText = useMemo(() => {
         if (isMintPending || isApprovalPending || isMintConfirming || isApprovalConfirming) {
             return 'Minting...';
@@ -102,6 +98,15 @@ export const MintForm = () => {
 
     return (
         <>
+            {(isMintPending || isApprovalPending || isMintConfirming || isApprovalConfirming) && (
+                <LoadingTransaction
+                    message={
+                        isApprovalPending || isApprovalConfirming
+                            ? "Approving Transaction..."
+                            : "Minting In Progress..."
+                    }
+                />
+            )}
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
                     <div className="space-y-4">
@@ -128,10 +133,11 @@ export const MintForm = () => {
                     </div>
                 </form>
             </Form>
-            <AlertDialogTransaction
-                isOpen={isAlertOpen}
-                transactionHash={mintHash || ''}
-                onClose={handleAlertClose}
+            <SuccessDialog
+                isOpen={showSuccessDialog}
+                onClose={() => setShowSuccessDialog(false)}
+                txHash={mintHash || ''}
+                amount={amount}
             />
         </>
     );

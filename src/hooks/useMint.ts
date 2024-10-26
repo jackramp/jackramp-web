@@ -8,7 +8,7 @@ import { HexAddress } from '@/types';
 export const useMint = () => {
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const { address } = useAccount();
-
+    
     const {
         data: approvalHash,
         isPending: isApprovalPending,
@@ -22,7 +22,7 @@ export const useMint = () => {
     } = useWriteContract();
 
     const {
-        isLoading: isApprovalConfirming,
+        isLoading: isApprovalConfirming
     } = useWaitForTransactionReceipt({
         hash: approvalHash,
     });
@@ -81,6 +81,7 @@ export const useMint = () => {
         isApprovalConfirming,
         isMintConfirming,
         allowance,
-        handleMint
+        handleMint,
+        isMintConfirmed
     };
 };

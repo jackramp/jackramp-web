@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { readContract } from "@wagmi/core";
-import debounce from "lodash.debounce";
 import { config } from "@/lib/wagmi";
 import { HexAddress } from "@/types";
 import { mockERC20ABI } from "@/lib/abi/mockERC20ABI";
@@ -66,26 +65,7 @@ export const useERC20Balance = (
         }
     }, [address, token, enabled]);
 
-    const debouncedFetchRef = useRef<ReturnType<typeof debounce>>();
-    
-    useEffect(() => {
-        debouncedFetchRef.current = debounce(
-            () => fetchBalance(),
-            debounceTimeRef.current,
-            { maxWait: 5000 }
-        );
-
-        return () => {
-            debouncedFetchRef.current?.cancel();
-        };
-    }, [fetchBalance]);
-
-    const debouncedFetch = useCallback(() => {
-        debouncedFetchRef.current?.();
-    }, []);
-
     const refreshBalance = useCallback(async () => {
-        debouncedFetchRef.current?.cancel();
         await fetchBalance();
     }, [fetchBalance]);
 
@@ -94,14 +74,21 @@ export const useERC20Balance = (
     }, [address, token]);
 
     useEffect(() => {
+        let intervalId: NodeJS.Timeout | null = null;
+
         if (enabled) {
-            debouncedFetch();
+            fetchBalance();
+            intervalId = setInterval(() => {
+                refreshBalance();
+            }, 2000);
         }
 
         return () => {
-            debouncedFetchRef.current?.cancel();
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
         };
-    }, [debouncedFetch, enabled]);
+    }, [fetchBalance, refreshBalance, enabled]);
 
     return {
         balance,

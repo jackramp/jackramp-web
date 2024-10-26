@@ -159,7 +159,7 @@ const FinancialChart = () => {
                 ))}
             </div>
 
-            <div ref={chartRef} className="w-full h-[450px] bg-transparent rounded-lg">
+            <div ref={chartRef} className="w-screen md:w-full h-[450px] bg-transparent rounded-lg">
                 <ResponsiveContainer width="100%" height="100%">
                     <AreaChart
                         data={filteredData}

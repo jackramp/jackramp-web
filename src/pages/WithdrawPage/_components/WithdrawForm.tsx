@@ -11,7 +11,7 @@ import { useERC20Balance } from "@/hooks/useERC20Balance";
 import { HexAddress } from "@/types";
 import { ADDRESS_JACKUSD, USDC_DECIMALS } from "@/constants/config";
 import { Label } from "@/components/ui/label";
-import { AlertDialogTransaction } from "../../MintPage/_components/AlertDialogTransaction";
+import { AlertDialogTransaction } from "./AlertDialogTransaction";
 import { useWithdraw } from "@/hooks/useWithdraw";
 import { convertBigIntToNumber } from "@/lib/utils";
 import { toast } from "sonner";
@@ -21,7 +21,7 @@ interface FormData {
     confirmed: boolean;
 }
 
-export const WithdrawForm = (props: any) => {
+export const WithdrawForm = (props: FormData) => {
     const [amount, setAmount] = useState("0");
     const { address } = useAccount();
     const { balance, loading: balanceLoading } = useERC20Balance(address as HexAddress, ADDRESS_JACKUSD);

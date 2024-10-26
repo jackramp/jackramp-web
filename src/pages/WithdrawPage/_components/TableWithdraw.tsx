@@ -8,7 +8,7 @@ import { useAccount } from "wagmi";
 import { queryWithdraw } from "@/graphql/query";
 
 type QueryData = {
-    mints: Withdraw[];
+    withdraws: Withdraw[];
 };
 
 export default function TableWithdraw() {
@@ -33,7 +33,7 @@ export default function TableWithdraw() {
         refetch();
     };
 
-    const filteredMints = data?.mints && address ? data?.mints.filter((mint: Withdraw) => mint.user.toLocaleLowerCase() === address.toLocaleLowerCase()) : [];
+    const filteredMints = data?.withdraws && address ? data?.withdraws.filter((mint: Withdraw) => mint.user.toLocaleLowerCase() === address.toLocaleLowerCase()) : [];
 
     if (!hasMounted) {
         return null;

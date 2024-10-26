@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { HexAddress } from "@/types";
-import { useM0Balance } from "@/hooks/useM0Balance";
+import { useBalance } from "@/hooks/useBalance";
 import { convertBigIntToNumber, toUSDCAmount } from "@/lib/utils";
 
 interface UseInsufficientBalanceOptions {
@@ -31,7 +31,7 @@ export const useInsufficientBalance = (
         error,
         refreshBalance,
         isStale
-    } = useM0Balance(address, token, options);
+    } = useBalance(address, token, options);
 
     const insufficientBalance = useMemo(() => {
         if (balance === undefined || amount === '') return false;

@@ -25,7 +25,7 @@ export function columns(): ColumnDef<TransactionHistoryRow>[] {
           title="#"
         />
       ),
-      cell: ({ row }) => <div className="w-12">{row.index + 1}</div>,
+      cell: ({ row }) => <div className="w-12 py-2">{row.index + 1}</div>,
       enableSorting: false,
     },
     {

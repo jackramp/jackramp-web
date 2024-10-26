@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useAccount } from "wagmi";
-import { useM0Balance } from "@/hooks/useM0Balance";
+import { useBalance } from "@/hooks/useBalance";
 import { HexAddress } from "@/types";
 import { ADDRESS_JACKUSD, USDC_DECIMALS } from "@/constants/config";
 import { Label } from "@/components/ui/label";
@@ -19,11 +19,11 @@ import { CurrencyInput } from "@/components/card/CurrencyInput";
 import { LoadingTransaction } from "@/components/loader/LoadingTransaction";
 
 export const WithdrawForm = () => {
-    const [amount, setAmount] = useState("0");
+    const [amount, setAmount] = useState("");
     const { address } = useAccount();
     const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
-    const { balance } = useM0Balance(address as HexAddress, ADDRESS_JACKUSD);
+    const { balance } = useBalance(address as HexAddress, ADDRESS_JACKUSD);
 
     const {
         isWithdrawPending,

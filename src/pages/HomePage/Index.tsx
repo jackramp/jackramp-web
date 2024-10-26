@@ -1,12 +1,11 @@
 import { Suspense } from 'react'
+import Homepage from './_components/Homepage'
 
 export const HomePage = () => {
     return (
-        <div className="flex flex-col w-screen h-screen z-10 items-center justify-center overflow-y-auto overflow-x-hidden">
+        <div className="flex w-screen h-screen z-10">
             <Suspense fallback={<div>Loading...</div>}>
-                <div className='z-10'>
-                    Jackramp
-                </div>
+                <Homepage />
             </Suspense>
         </div>
     )

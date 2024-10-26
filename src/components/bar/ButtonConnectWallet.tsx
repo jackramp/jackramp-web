@@ -1,7 +1,7 @@
 import { BackgroundGradient } from "../ui/background-gradient";
 import { Button } from "../ui/button";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useM0Balance } from "@/hooks/useM0Balance";
+import { useBalance } from "@/hooks/useBalance";
 import { useAccount } from "wagmi";
 import { ADDRESS_JACKUSD } from "@/constants/config";
 import { HexAddress } from "@/types";
@@ -59,7 +59,7 @@ export function ButtonConnectWallet() {
 
 export const ConnectButtonWalletComponents = () => {
     const { address } = useAccount();
-    const { balance, error } = useM0Balance(address as HexAddress, ADDRESS_JACKUSD);
+    const { balance, error } = useBalance(address as HexAddress, ADDRESS_JACKUSD);
 
     return (
         <ConnectButton.Custom>

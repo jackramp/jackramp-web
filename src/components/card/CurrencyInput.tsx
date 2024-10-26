@@ -34,7 +34,7 @@ export const CurrencyInput = ({
             {coin && (
                 <div
                     className="w-auto h-[80%] absolute top-1/2 left-2 -translate-y-1/2 rounded-full p-3 text-white 
-                    bg-secondary/80 hover:bg-gray-700 shadow-none flex flex-row items-center gap-1"
+                    bg-secondary/80 hover:bg-gray-700 shadow-none flex flex-row items-center gap-2"
                 >
                     <img
                         src={coin.image}

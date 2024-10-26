@@ -4,12 +4,12 @@ import { config } from "@/lib/wagmi";
 import { HexAddress } from "@/types";
 import { mockM0ABI } from "@/lib/abi/mockM0ABI";
 
-interface UseM0BalanceOptions {
+interface UseBalanceOptions {
     debounceTime?: number;
     enabled?: boolean;
 }
 
-interface UseM0BalanceResult {
+interface UseBalanceResult {
     balance: bigint | undefined;
     loading: boolean;
     error: Error | null;
@@ -17,11 +17,11 @@ interface UseM0BalanceResult {
     isStale: boolean;
 }
 
-export const useM0Balance = (
+export const useBalance = (
     address: HexAddress,
     token: HexAddress,
-    options: UseM0BalanceOptions = {}
-): UseM0BalanceResult => {
+    options: UseBalanceOptions = {}
+): UseBalanceResult => {
     const { debounceTime = 1000, enabled = true } = options;
 
     const [balance, setBalance] = useState<bigint | undefined>(undefined);

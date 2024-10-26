@@ -22,7 +22,7 @@ export function columns(): ColumnDef<TransactionHistoryRow>[] {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="#" />
       ),
-      cell: ({ row }) => row.index + 1,
+      cell: ({ row }) => <div className="w-12 py-2">{row.index + 1}</div>,
       enableSorting: false,
     },
     {

@@ -3,15 +3,15 @@ import { DataTableColumnHeader } from "./ColumnHeader";
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
 import { convertTimestampToDate, formatAddress } from "@/lib/utils";
-import { RequestOffRamps } from "@/types";
+import { Withdraw } from "@/types";
 
-export type TransactionHistoryRow = RequestOffRamps;
+export type TransactionHistoryRow = Withdraw;
 
 const copyToClipboard = (text: string) => {
   navigator.clipboard.writeText(text).then(() => {
-    toast.success('Copied to clipboard!')
+    toast.success('Copied to clipboard!');
   }).catch(err => {
-    toast.error(`Failed to copy to clipboard! ${err}`)
+    toast.error(`Failed to copy to clipboard! ${err}`);
   });
 };
 
@@ -20,179 +20,101 @@ export function columns(): ColumnDef<TransactionHistoryRow>[] {
     {
       id: "number",
       header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="#"
-        />
+        <DataTableColumnHeader column={column} title="#" />
       ),
-      cell: ({ row }) => <div className="w-12">{row.index + 1}</div>,
+      cell: ({ row }) => row.index + 1,
       enableSorting: false,
     },
     {
       accessorKey: "id",
       header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="ID"
-        />
+        <DataTableColumnHeader column={column} title="ID" />
       ),
-      cell: ({ row }) => (
-        <div className="flex items-center truncate w-fit justify-between">
-          <span className="mr-2">{formatAddress(row.original.id)}</span>
-          <button
-            onClick={() => copyToClipboard(row.original.id)}
-            aria-label="Copy to clipboard"
-            className="text-gray-500 hover:text-gray-700 focus:outline-none"
-          >
-            <Copy size={16} />
-          </button>
-        </div>
-      ),
+      cell: ({ row }) => {
+        const id = row.original.id;
+        if (!id) return "-";
+        return (
+          <div className="flex items-center gap-2">
+            <span>{formatAddress(id)}</span>
+            <button
+              onClick={() => copyToClipboard(id)}
+              aria-label="Copy to clipboard"
+              className="text-gray-500 hover:text-gray-700 focus:outline-none"
+            >
+              <Copy className="h-4 w-4" />
+            </button>
+          </div>
+        );
+      },
     },
     {
       accessorKey: "blockNumber",
       header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Block Number"
-        />
+        <DataTableColumnHeader column={column} title="Block Number" />
       ),
-      cell: ({ row }) => <div>{row.original.blockNumber}</div>,
+      cell: ({ row }) => row.original.blockNumber || "-",
     },
     {
       accessorKey: "blockTimestamp",
       header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Timestamp"
-        />
+        <DataTableColumnHeader column={column} title="Timestamp" />
       ),
-      cell: ({ row }) => <div>{convertTimestampToDate(parseInt(row.original.blockTimestamp))}</div>,
+      cell: ({ row }) => {
+        const timestamp = row.original.blockTimestamp;
+        if (!timestamp) return "-";
+        return convertTimestampToDate(parseInt(timestamp));
+      },
     },
     {
       accessorKey: "transactionHash",
       header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Transaction Hash"
-        />
+        <DataTableColumnHeader column={column} title="Transaction Hash" />
       ),
-      cell: ({ row }) => (
-        <div className="flex items-center truncate w-fit justify-between">
-          <span className="mr-2">{formatAddress(row.original.transactionHash)}</span>
-          <button
-            onClick={() => copyToClipboard(row.original.transactionHash)}
-            aria-label="Copy to clipboard"
-            className="text-gray-500 hover:text-gray-700 focus:outline-none"
-          >
-            <Copy size={16} />
-          </button>
-        </div>
-      ),
+      cell: ({ row }) => {
+        const hash = row.original.transactionHash;
+        if (!hash) return "-";
+        return (
+          <div className="flex items-center gap-2">
+            <span>{formatAddress(hash)}</span>
+            <button
+              onClick={() => copyToClipboard(hash)}
+              aria-label="Copy to clipboard" 
+              className="text-gray-500 hover:text-gray-700 focus:outline-none"
+            >
+              <Copy className="h-4 w-4" />
+            </button>
+          </div>
+        );
+      },
     },
     {
-      accessorKey: "params_amount",
+      accessorKey: "amount",
       header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Amount"
-        />
+        <DataTableColumnHeader column={column} title="Amount" />
       ),
-      cell: ({ row }) => <div>{row.original.params_amount}</div>,
+      cell: ({ row }) => row.original.amount || "-",
     },
     {
-      accessorKey: "params_amountRealWorld",
+      accessorKey: "user",
       header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Real World Amount"
-        />
+        <DataTableColumnHeader column={column} title="User" />
       ),
-      cell: ({ row }) => <div>{row.original.params_amountRealWorld}</div>,
-    },
-    {
-      accessorKey: "params_channelAccount",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Channel Account"
-        />
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center truncate w-fit justify-between">
-          <span className="mr-2">{formatAddress(row.original.params_channelAccount)}</span>
-          <button
-            onClick={() => copyToClipboard(row.original.params_channelAccount)}
-            aria-label="Copy to clipboard"
-            className="text-gray-500 hover:text-gray-700 focus:outline-none"
-          >
-            <Copy size={16} />
-          </button>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "params_channelId",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Channel ID"
-        />
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center truncate w-fit justify-between">
-          <span className="mr-2">{formatAddress(row.original.params_channelId)}</span>
-          <button
-            onClick={() => copyToClipboard(row.original.params_channelId)}
-            aria-label="Copy to clipboard"
-            className="text-gray-500 hover:text-gray-700 focus:outline-none"
-          >
-            <Copy size={16} />
-          </button>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "params_user",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="User"
-        />
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center truncate w-fit justify-between">
-          <span className="mr-2">{formatAddress(row.original.params_user)}</span>
-          <button
-            onClick={() => copyToClipboard(row.original.params_user)}
-            aria-label="Copy to clipboard"
-            className="text-gray-500 hover:text-gray-700 focus:outline-none"
-          >
-            <Copy size={16} />
-          </button>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "requestOfframpId",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Request ID"
-        />
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center truncate w-fit justify-between">
-          <span className="mr-2">{formatAddress(row.original.requestOfframpId)}</span>
-          <button
-            onClick={() => copyToClipboard(row.original.requestOfframpId)}
-            aria-label="Copy to clipboard"
-            className="text-gray-500 hover:text-gray-700 focus:outline-none"
-          >
-            <Copy size={16} />
-          </button>
-        </div>
-      ),
+      cell: ({ row }) => {
+        const user = row.original.user;
+        if (!user) return "-";
+        return (
+          <div className="flex items-center gap-2">
+            <span>{formatAddress(user)}</span>
+            <button
+              onClick={() => copyToClipboard(user)}
+              aria-label="Copy to clipboard"
+              className="text-gray-500 hover:text-gray-700 focus:outline-none"
+            >
+              <Copy className="h-4 w-4" />
+            </button>
+          </div>
+        );
+      },
     },
   ];
 }

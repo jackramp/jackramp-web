@@ -1,37 +1,29 @@
-import { columns } from "@/components/tables/proof/columns";
-import { DataTable } from "@/components/tables/proof/DataTable";
+import { columns } from "@/components/tables/withdraw/columns";
+import { DataTable } from "@/components/tables/withdraw/DataTable";
 import { useEffect, useState } from "react";
 import { gql, request } from 'graphql-request';
 import { useQuery } from "@tanstack/react-query";
-import { OffRamps } from "@/types";
+import { Withdraw } from "@/types";
+import { useAccount } from "wagmi";
 
 const query = gql`{
-    offRamps(orderBy: blockTimestamp, orderDirection: desc) {
+    withdraws(orderBy: blockTimestamp, orderDirection: desc) {
         id
-        user
-        requestedAmount
-        requestedAmountRealWorld
-        blockNumber
         blockTimestamp
-        channelAccount
-        channelId
-        fillBlockNumber
-        fillBlockTimestamp
-        fillTransactionHash
-        proof
-        receiver
-        reclaimProof
-        status
+        blockNumber
+        amount
         transactionHash
+        user
     }
 }`
 
 type QueryData = {
-    offRamps: OffRamps[];
+    mints: Withdraw[];
 };
 
-export default function TableProof() {
+export default function TableWithdraw() {
     const [hasMounted, setHasMounted] = useState(false);
+    const { address } = useAccount();
 
     useEffect(() => {
         setHasMounted(true);
@@ -51,6 +43,8 @@ export default function TableProof() {
         refetch();
     };
 
+    const filteredMints = data?.mints && address ? data?.mints.filter((mint: Withdraw) => mint.user.toLocaleLowerCase() === address.toLocaleLowerCase()) : [];
+
     if (!hasMounted) {
         return null;
     }
@@ -58,7 +52,7 @@ export default function TableProof() {
     return (
         <div className="w-full space-y-4 p-5 h-auto z-10">
             <DataTable
-                data={data?.offRamps || []}
+                data={filteredMints || []}
                 columns={columns()}
                 handleRefresh={handleRefresh}
                 isLoading={isLoading}

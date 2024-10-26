@@ -1,22 +1,25 @@
 import { Button } from "@/components/ui/button";
 
-interface WithdrawMethodProps {
+interface MethodProps {
     value: string;
     title: string;
     duration: string;
     rate: string;
+    onClick: (value: string) => void;
 }
 
-export const WithdrawMethod = ({
+export const Method = ({
     value,
     title,
     duration,
     rate,
-}: WithdrawMethodProps) => (
+    onClick
+}: MethodProps) => (
     <Button
         type="button"
         variant={value === "jackramp" ? "active" : "secondary"}
-        className={"w-full h-auto p-4 justify-start space-x-4 rounded-[20px] border " + (value ? "jackramp" : " border-slate-600")}
+        className={"w-full h-auto p-4 justify-start space-x-4 rounded-[20px] border " + (value === "jackramp" ? "" : " border-slate-600")}
+        onClick={() => onClick(value)}
     >
         <div className="text-left">
             <p className="font-semibold">{title}</p>

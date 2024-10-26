@@ -3,7 +3,8 @@ import { DataTable } from "@/components/tables/proof/DataTable";
 import { useEffect, useState } from "react";
 import { gql, request } from 'graphql-request';
 import { useQuery } from "@tanstack/react-query";
-import { OffRamps } from "@/types";
+import { Swap } from "@/types";
+import { useAccount } from "wagmi";
 
 const query = gql`{
     offRamps(orderBy: blockTimestamp, orderDirection: desc) {
@@ -15,23 +16,17 @@ const query = gql`{
         blockTimestamp
         channelAccount
         channelId
-        fillBlockNumber
-        fillBlockTimestamp
-        fillTransactionHash
-        proof
-        receiver
-        reclaimProof
-        status
         transactionHash
     }
 }`
 
 type QueryData = {
-    offRamps: OffRamps[];
+    offRamps: Swap[];
 };
 
-export default function TableProof() {
+export default function TableSwap() {
     const [hasMounted, setHasMounted] = useState(false);
+    const { address } = useAccount();
 
     useEffect(() => {
         setHasMounted(true);
@@ -51,6 +46,8 @@ export default function TableProof() {
         refetch();
     };
 
+    const filteredSwaps = address && data?.offRamps ? data?.offRamps.filter((swap: Swap) => swap.user.toLocaleLowerCase() === address.toLocaleLowerCase()) : [];
+
     if (!hasMounted) {
         return null;
     }
@@ -58,7 +55,7 @@ export default function TableProof() {
     return (
         <div className="w-full space-y-4 p-5 h-auto z-10">
             <DataTable
-                data={data?.offRamps || []}
+                data={filteredSwaps || []}
                 columns={columns()}
                 handleRefresh={handleRefresh}
                 isLoading={isLoading}

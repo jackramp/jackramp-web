@@ -26,19 +26,20 @@ export const CurrencyInput = ({
                 placeholder="0.00"
                 inputMode="decimal"
                 className={cn(
-                    "h-full relative text-end text-2xl border-[3px] rounded-2xl border-slate-500",
-                    "placeholder:text-gray-400"
+                    "h-full relative text-end text-2xl border-[3px] rounded-full border-slate-500",
+                    "placeholder:text-gray-400",
+                    "px-6 py-2"
                 )}
             />
             {coin && (
                 <div
-                    className="w-auto h-[80%] absolute top-1/2 left-2 -translate-y-1/2 rounded-xl text-white 
+                    className="w-auto h-[80%] absolute top-1/2 left-2 -translate-y-1/2 rounded-full p-3 text-white 
                     bg-secondary/80 hover:bg-gray-700 shadow-none flex flex-row items-center gap-1"
                 >
                     <img
                         src={coin.image}
                         alt={coin.symbol}
-                        className="w-5 h-5 rounded-full"
+                        className="w-7 h-7 rounded-full"
                     />
                     <Label>
                         {coin.symbol}

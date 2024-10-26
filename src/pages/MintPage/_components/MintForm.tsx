@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { m0Coin } from "@/constants/m0-coin";
-import { CurrencyInput } from "./CurrencyInput";
 import { useAccount } from "wagmi";
 import { ADDRESS_MOCKERC20 } from "@/constants/config";
 import { useMint } from "@/hooks/useMint";
@@ -12,7 +11,10 @@ import { toast } from "sonner";
 import { useInsufficientBalance } from "@/hooks/useInsufficientBalance";
 import { HexAddress } from "@/types";
 import { LoadingTransaction } from "@/components/loader/LoadingTransaction";
-import { SuccessDialog } from "../../SwapPage/_components/SuccessDialog";
+import { ProcessingInfo } from "@/components/card/ProcessingInfo";
+import { Method } from "@/components/card/Method";
+import { CurrencyInput } from "@/components/card/CurrencyInput";
+import { SuccessDialog } from "@/components/dialog/SuccessDialog";
 
 interface FormData {
     confirmed: boolean;
@@ -123,6 +125,26 @@ export const MintForm = () => {
                                 />
                             </motion.div>
                         </div>
+                        <div className="flex flex-row gap-5">
+                            <Method
+                                value={"jackramp"}
+                                title={"JackRamp"}
+                                duration={"Realtime"}
+                                rate={"0%"}
+                                onClick={() => { }}
+                            />
+                            <Method
+                                value={"-"}
+                                title={"Available Soon"}
+                                duration={"-"}
+                                rate={"-"}
+                                onClick={() => { }}
+                            />
+                        </div>
+                        <ProcessingInfo
+                            method={"jackramp"}
+                            networkFee={"-"}
+                        />
                         <Button
                             type="submit"
                             className="w-full rounded-xl"

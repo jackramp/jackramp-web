@@ -2,32 +2,30 @@ import { useCallback, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { CurrencyInput } from "./CurrencyInput";
-import { WithdrawMethod } from "./WithdrawMethod";
-import { ProcessingInfo } from "./ProcessingInfo";
+import { Form } from "@/components/ui/form";
 import { useAccount } from "wagmi";
 import { useM0Balance } from "@/hooks/useM0Balance";
 import { HexAddress } from "@/types";
 import { ADDRESS_JACKUSD, USDC_DECIMALS } from "@/constants/config";
 import { Label } from "@/components/ui/label";
-import { AlertDialogTransaction } from "./AlertDialogTransaction";
 import { useWithdraw } from "@/hooks/useWithdraw";
 import { convertBigIntToNumber } from "@/lib/utils";
 import { toast } from "sonner";
 import { jackrampCoin } from "@/constants/jackramp-coin";
+import { SuccessDialog } from "../../../components/dialog/SuccessDialog";
+import { ProcessingInfo } from "@/components/card/ProcessingInfo";
+import { Method } from "@/components/card/Method";
+import { CurrencyInput } from "@/components/card/CurrencyInput";
+import { LoadingTransaction } from "@/components/loader/LoadingTransaction";
 
-interface FormData {
-    confirmed: boolean;
-}
-
-export const WithdrawForm = (props: FormData) => {
+export const WithdrawForm = () => {
     const [amount, setAmount] = useState("0");
     const { address } = useAccount();
-    const { balance, loading: balanceLoading } = useM0Balance(address as HexAddress, ADDRESS_JACKUSD);
+    const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+
+    const { balance } = useM0Balance(address as HexAddress, ADDRESS_JACKUSD);
 
     const {
-        isAlertOpen,
         isWithdrawPending,
         withdrawHash,
         isWithdrawConfirming,
@@ -35,9 +33,7 @@ export const WithdrawForm = (props: FormData) => {
     } = useWithdraw();
 
     const form = useForm<FormData>({
-        defaultValues: {
-            confirmed: false
-        }
+        defaultValues: {}
     });
 
     const handleAmountChange = useCallback((value: string) => {
@@ -53,8 +49,8 @@ export const WithdrawForm = (props: FormData) => {
         return convertBigIntToNumber(balance) < convertBigIntToNumber(BigInt(amount));
     }, [balance, amount]);
 
-    const handleSubmit = useCallback(async (data: FormData) => {
-        if (!data.confirmed || insufficientBalance) {
+    const handleSubmit = useCallback(async () => {
+        if (insufficientBalance) {
             toast.error('Invalid amount or not enough balance!');
             return;
         }
@@ -76,19 +72,18 @@ export const WithdrawForm = (props: FormData) => {
         ]
     );
 
-    const handleAlertClose = useCallback(() => {
-        if (isWithdrawPending || isWithdrawConfirming) {
-            toast.dismiss();
-        }
-
-        if (isAlertOpen) {
-            form.reset();
-        }
-    }, [form, isWithdrawPending, isWithdrawConfirming, isAlertOpen]);
-
     return (
         <>
-            <Form {...form} {...props}>
+            {(isWithdrawPending || isWithdrawConfirming) && (
+                <LoadingTransaction
+                    message={
+                        isWithdrawPending
+                            ? 'Withdrawing...'
+                            : 'Confirming withdrawal...'
+                    }
+                />
+            )}
+            <Form {...form}>
                 <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
                     <div className="space-y-4">
                         <div className="flex relative flex-col h-fit w-auto gap-2">
@@ -104,50 +99,25 @@ export const WithdrawForm = (props: FormData) => {
                                 />
                             </motion.div>
                         </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <WithdrawMethod
-                                value="jackramp"
-                                title="Jackramp"
-                                duration="~10 second"
-                                rate="1:1"
+                        <div className="flex flex-row gap-5">
+                            <Method
+                                value={"jackramp"}
+                                title={"JackRamp"}
+                                duration={"Realtime"}
+                                rate={"0%"}
+                                onClick={() => { }}
                             />
-                            <WithdrawMethod
-                                value=""
-                                title="Available soon"
-                                duration="-"
-                                rate="-"
+                            <Method
+                                value={"-"}
+                                title={"Available Soon"}
+                                duration={"-"}
+                                rate={"-"}
+                                onClick={() => { }}
                             />
                         </div>
-
                         <ProcessingInfo
-                            method={"lido"}
-                            networkFee="0.5"
-                            balanceLoading={balanceLoading}
-                            balance={balance}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="confirmed"
-                            render={({ field }) => (
-                                <FormItem className="flex flex-row items-center space-x-3 space-y-0 pt-3">
-                                    <FormControl>
-                                        <input
-                                            type="checkbox"
-                                            checked={field.value}
-                                            onChange={field.onChange}
-                                            className="accent-primary cursor-pointer"
-                                        />
-                                    </FormControl>
-                                    <div className="space-y-1 leading-none">
-                                        <FormLabel className="cursor-pointer">Confirm transaction</FormLabel>
-                                        <FormDescription>
-                                            I understand this action cannot be undone
-                                        </FormDescription>
-                                    </div>
-                                </FormItem>
-                            )}
+                            method={"jackramp"}
+                            networkFee={"-"}
                         />
                         <Button
                             type="submit"
@@ -164,10 +134,11 @@ export const WithdrawForm = (props: FormData) => {
                     </div>
                 </form>
             </Form>
-            <AlertDialogTransaction
-                isOpen={isAlertOpen}
-                transactionHash={withdrawHash || ''}
-                onClose={handleAlertClose}
+            <SuccessDialog
+                isOpen={showSuccessDialog}
+                onClose={() => setShowSuccessDialog(false)}
+                txHash={withdrawHash || ''}
+                amount={amount}
             />
         </>
     );

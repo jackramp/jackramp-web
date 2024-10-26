@@ -44,3 +44,43 @@ export interface Mint {
     user: string
     id: string
 }
+
+export interface OffRamps {
+    id: string;
+    user: string;
+    requestedAmount: string;
+    requestedAmountRealWorld: string;
+    blockNumber: string;
+    blockTimestamp: string;
+    channelAccount: string;
+    channelId: string;
+    fillBlockNumber: string;
+    fillBlockTimestamp: string;
+    fillTransactionHash: string;
+    proof: string;
+    receiver: string;
+    reclaimProof: string;
+    status: string;
+    transactionHash: string;
+}
+
+export interface Withdraw {
+    id: string
+    blockTimestamp: string
+    blockNumber: string
+    amount: string
+    transactionHash: string
+    user: string
+}
+
+export interface Swap {
+    id: string;
+    user: string;
+    requestedAmount: string;
+    requestedAmountRealWorld: string;
+    blockNumber: string;
+    blockTimestamp: string;
+    channelAccount: string;
+    channelId: string;
+    transactionHash: string;
+}

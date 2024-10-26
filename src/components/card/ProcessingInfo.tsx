@@ -13,7 +13,7 @@ export const ProcessingInfo = ({ method, networkFee }: ProcessingInfoProps) => (
                 <span className="text-sm">Est. processing time</span>
             </div>
             <span className="text-sm font-medium">
-                {method === "lido" ? "~1 day" : "~5 minutes"}
+                {method === "jackramp" ? "~20 seconds" : "~10 seconds"}
             </span>
         </div>
         <div className="flex justify-between items-center">

@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { CurrencyInput } from "./CurrencyInput";
 import { useAccount } from "wagmi";
 import { ADDRESS_MOCKERC20 } from "@/constants/config";
 import { useSwap } from "@/hooks/useSwap";
@@ -11,8 +10,13 @@ import { toast } from "sonner";
 import { useInsufficientBalance } from "@/hooks/useInsufficientBalance";
 import { HexAddress } from "@/types";
 import { LoadingTransaction } from "@/components/loader/LoadingTransaction";
-import { SuccessDialog } from "./SuccessDialog";
 import { jackrampCoin } from "@/constants/jackramp-coin";
+import { CurrencyInput } from "@/components/card/CurrencyInput";
+import { Method } from "@/components/card/Method";
+import { ProcessingInfo } from "@/components/card/ProcessingInfo";
+import { SuccessDialog } from "@/components/dialog/SuccessDialog";
+import { m0Coin } from "@/constants/m0-coin";
+import { ArrowDownUp } from "lucide-react";
 
 interface FormData {
     confirmed: boolean;
@@ -92,7 +96,9 @@ export const SwapForm = () => {
             {(isSwapPending || isSwapConfirming) && (
                 <LoadingTransaction
                     message={
-                        isSwapPending ? "Swaping In Progress..." : "Swaping Confirming..."
+                        isSwapPending
+                            ? 'Withdrawing...'
+                            : 'Confirming withdrawal...'
                     }
                 />
             )}
@@ -111,7 +117,42 @@ export const SwapForm = () => {
                                     coin={jackrampCoin}
                                 />
                             </motion.div>
+                            <motion.div className="flex items-center justify-center">
+                                <ArrowDownUp />
+                            </motion.div>
+                            <motion.div
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.5, delay: 0.4 }}
+                            >
+                                <CurrencyInput
+                                    value={amount}
+                                    onChange={handleAmountChange}
+                                    coin={m0Coin}
+                                    disabled
+                                />
+                            </motion.div>
                         </div>
+                        <div className="flex flex-row gap-5">
+                            <Method
+                                value={"jackramp"}
+                                title={"JackRamp"}
+                                duration={"Realtime"}
+                                rate={"0%"}
+                                onClick={() => { }}
+                            />
+                            <Method
+                                value={"-"}
+                                title={"Available Soon"}
+                                duration={"-"}
+                                rate={"-"}
+                                onClick={() => { }}
+                            />
+                        </div>
+                        <ProcessingInfo
+                            method={"jackramp"}
+                            networkFee={"-"}
+                        />
                         <Button
                             type="submit"
                             className="w-full rounded-xl"

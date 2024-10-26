@@ -43,7 +43,7 @@ export default function TableMint() {
         refetch();
     };
 
-    const filteredMints = address ? data?.mints.filter((mint: Mint) => mint.user.toLocaleLowerCase() === address.toLocaleLowerCase()) : [];
+    const filteredMints = address && data?.mints ? data?.mints.filter((mint: Mint) => mint.user.toLocaleLowerCase() === address.toLocaleLowerCase()) : [];
 
     if (!hasMounted) {
         return null;

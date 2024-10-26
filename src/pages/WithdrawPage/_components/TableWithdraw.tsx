@@ -1,21 +1,11 @@
 import { columns } from "@/components/tables/withdraw/columns";
 import { DataTable } from "@/components/tables/withdraw/DataTable";
 import { useEffect, useState } from "react";
-import { gql, request } from 'graphql-request';
+import { request } from 'graphql-request';
 import { useQuery } from "@tanstack/react-query";
 import { Withdraw } from "@/types";
 import { useAccount } from "wagmi";
-
-const query = gql`{
-    withdraws(orderBy: blockTimestamp, orderDirection: desc) {
-        id
-        blockTimestamp
-        blockNumber
-        amount
-        transactionHash
-        user
-    }
-}`
+import { queryWithdraw } from "@/graphql/query";
 
 type QueryData = {
     mints: Withdraw[];
@@ -34,7 +24,7 @@ export default function TableWithdraw() {
     const { data, isLoading, refetch } = useQuery<QueryData>({
         queryKey: ['data'],
         queryFn: async () => {
-            return await request(url, query);
+            return await request(url, queryWithdraw);
         },
         refetchInterval: 10000,
     });

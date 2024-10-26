@@ -1,30 +1,10 @@
 import { columns } from "@/components/tables/proof/columns";
 import { DataTable } from "@/components/tables/proof/DataTable";
 import { useEffect, useState } from "react";
-import { gql, request } from 'graphql-request';
+import { request } from 'graphql-request';
 import { useQuery } from "@tanstack/react-query";
 import { OffRamps } from "@/types";
-
-const query = gql`{
-    offRamps(orderBy: blockTimestamp, orderDirection: desc) {
-        id
-        user
-        requestedAmount
-        requestedAmountRealWorld
-        blockNumber
-        blockTimestamp
-        channelAccount
-        channelId
-        fillBlockNumber
-        fillBlockTimestamp
-        fillTransactionHash
-        proof
-        receiver
-        reclaimProof
-        status
-        transactionHash
-    }
-}`
+import { queryProof } from "@/graphql/query";
 
 type QueryData = {
     offRamps: OffRamps[];
@@ -42,7 +22,7 @@ export default function TableProof() {
     const { data, isLoading, refetch } = useQuery<QueryData>({
         queryKey: ['data'],
         queryFn: async () => {
-            return await request(url, query);
+            return await request(url, queryProof);
         },
         refetchInterval: 10000,
     });

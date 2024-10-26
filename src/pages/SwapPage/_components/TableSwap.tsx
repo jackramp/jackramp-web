@@ -1,24 +1,11 @@
 import { columns } from "@/components/tables/proof/columns";
 import { DataTable } from "@/components/tables/proof/DataTable";
 import { useEffect, useState } from "react";
-import { gql, request } from 'graphql-request';
+import { request } from 'graphql-request';
 import { useQuery } from "@tanstack/react-query";
 import { Swap } from "@/types";
 import { useAccount } from "wagmi";
-
-const query = gql`{
-    offRamps(orderBy: blockTimestamp, orderDirection: desc) {
-        id
-        user
-        requestedAmount
-        requestedAmountRealWorld
-        blockNumber
-        blockTimestamp
-        channelAccount
-        channelId
-        transactionHash
-    }
-}`
+import { querySwap } from "@/graphql/query";
 
 type QueryData = {
     offRamps: Swap[];
@@ -37,7 +24,7 @@ export default function TableSwap() {
     const { data, isLoading, refetch } = useQuery<QueryData>({
         queryKey: ['data'],
         queryFn: async () => {
-            return await request(url, query);
+            return await request(url, querySwap);
         },
         refetchInterval: 10000,
     });

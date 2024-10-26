@@ -1,21 +1,11 @@
 import { columns } from "@/components/tables/mint/columns";
 import { DataTable } from "@/components/tables/mint/DataTable";
 import { useEffect, useState } from "react";
-import { gql, request } from 'graphql-request';
+import { request } from 'graphql-request';
 import { useQuery } from "@tanstack/react-query";
 import { Mint } from "@/types";
 import { useAccount } from "wagmi";
-
-const query = gql`{
-    mints(orderDirection: desc, orderBy: blockTimestamp) {
-        amount
-        blockNumber
-        blockTimestamp
-        transactionHash
-        user
-        id
-    }
-}`
+import { queryMint } from "@/graphql/query";
 
 type QueryData = {
     mints: Mint[];
@@ -34,7 +24,7 @@ export default function TableMint() {
     const { data, isLoading, refetch } = useQuery<QueryData>({
         queryKey: ['data'],
         queryFn: async () => {
-            return await request(url, query);
+            return await request(url, queryMint);
         },
         refetchInterval: 10000,
     });

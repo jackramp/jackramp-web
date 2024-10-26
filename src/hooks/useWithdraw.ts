@@ -46,6 +46,7 @@ export const useWithdraw = () => {
         withdrawHash,
         isWithdrawPending,
         handleWithdraw,
-        isWithdrawConfirming
+        isWithdrawConfirming,
+        isWithdrawConfirmed
     }
 }

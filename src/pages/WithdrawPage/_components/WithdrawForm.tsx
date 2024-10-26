@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -6,7 +6,7 @@ import { Form } from "@/components/ui/form";
 import { useAccount } from "wagmi";
 import { useBalance } from "@/hooks/useBalance";
 import { HexAddress } from "@/types";
-import { ADDRESS_JACKUSD, USDC_DECIMALS } from "@/constants/config";
+import { ADDRESS_JACKUSD } from "@/constants/config";
 import { Label } from "@/components/ui/label";
 import { useWithdraw } from "@/hooks/useWithdraw";
 import { convertBigIntToNumber } from "@/lib/utils";
@@ -29,6 +29,7 @@ export const WithdrawForm = () => {
         isWithdrawPending,
         withdrawHash,
         isWithdrawConfirming,
+        isWithdrawConfirmed,
         handleWithdraw
     } = useWithdraw();
 
@@ -37,12 +38,15 @@ export const WithdrawForm = () => {
     });
 
     const handleAmountChange = useCallback((value: string) => {
-        const numericValue = value.replace(/[^0-9.]/g, '');
-        const parts = numericValue.split('.');
-        if (parts.length > 2) return;
-        if (parts[1]?.length > USDC_DECIMALS) return;
-        setAmount(numericValue);
+        setAmount(value);
     }, []);
+
+    useEffect(() => {
+        if (isWithdrawConfirmed && !isWithdrawConfirming) {
+            setShowSuccessDialog(true);
+            form.reset();
+        }
+    }, [isWithdrawConfirming, isWithdrawConfirmed, form]);
 
     const insufficientBalance = useMemo(() => {
         if (balance === undefined || amount === '') return false;
@@ -79,7 +83,7 @@ export const WithdrawForm = () => {
                     message={
                         isWithdrawPending
                             ? 'Withdrawing...'
-                            : 'Confirming withdrawal...'
+                            : 'Confirming withdraw...'
                     }
                 />
             )}
@@ -139,6 +143,7 @@ export const WithdrawForm = () => {
                 onClose={() => setShowSuccessDialog(false)}
                 txHash={withdrawHash || ''}
                 amount={amount}
+                processName={'Withdraw'}
             />
         </>
     );

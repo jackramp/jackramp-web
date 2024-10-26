@@ -160,6 +160,7 @@ export const MintForm = () => {
                 onClose={() => setShowSuccessDialog(false)}
                 txHash={mintHash || ''}
                 amount={amount}
+                processName={"Mint"}
             />
         </>
     );

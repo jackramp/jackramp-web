@@ -97,8 +97,8 @@ export const SwapForm = () => {
                 <LoadingTransaction
                     message={
                         isSwapPending
-                            ? 'Withdrawing...'
-                            : 'Confirming withdrawal...'
+                            ? 'Swapping...'
+                            : 'Confirming swapping...'
                     }
                 />
             )}
@@ -168,6 +168,7 @@ export const SwapForm = () => {
                 onClose={() => setShowSuccessDialog(false)}
                 txHash={swapHash || ''}
                 amount={amount}
+                processName={'Swap'}
             />
         </>
     );

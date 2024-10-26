@@ -12,12 +12,14 @@ export const SuccessDialog = ({
     isOpen,
     onClose,
     txHash,
-    amount
+    amount,
+    processName
 }:{
     isOpen: boolean,
     onClose: () => void,
     txHash: string,
-    amount: string
+    amount: string,
+    processName: string
 }) => {
     const [copied, setCopied] = React.useState(false);
 
@@ -43,10 +45,10 @@ export const SuccessDialog = ({
                 <div className="space-y-4 pt-4">
                     <div className="flex flex-col items-center gap-2 text-center">
                         <div className="text-2xl font-bold text-green-600">
-                            +{amount} Tokens
+                            {processName} {amount} Tokens
                         </div>
                         <p className="text-sm text-gray-500">
-                            have been successfully minted to your wallet
+                            have been successfully
                         </p>
                     </div>
 

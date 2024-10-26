@@ -147,7 +147,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
       _buildData();
       _buildMaterial();
     }
-  }, [_buildData, _buildMaterial]);
+  };
 
   const startAnimation = useCallback(() => {
     if (!globeRef.current || !globeData) return;
@@ -269,6 +269,6 @@ export function World(props: WorldProps) {
         minPolarAngle={Math.PI / 3.5}
         maxPolarAngle={Math.PI - Math.PI / 3}
       />
-    </Canvas>
+    </div>
   );
 }

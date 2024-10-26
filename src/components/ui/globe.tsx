@@ -1,10 +1,11 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Color, Scene, Fog, PerspectiveCamera, Vector3 } from "three";
 import ThreeGlobe from "three-globe";
 import { useThree, Object3DNode, Canvas, extend } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import countries from "@/data/globe.json";
+import { genRandomNumbers, hexToRgb } from "@/lib/utils";
 declare module "@react-three/fiber" {
   interface ThreeElements {
     threeGlobe: Object3DNode<ThreeGlobe, typeof ThreeGlobe>;
@@ -74,7 +75,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
 
   const globeRef = useRef<ThreeGlobe | null>(null);
 
-  const defaultProps = {
+  const defaultProps = useMemo(() => ({
     pointSize: 1,
     atmosphereColor: "#ffffff",
     showAtmosphere: true,
@@ -89,16 +90,9 @@ export function Globe({ globeConfig, data }: WorldProps) {
     rings: 1,
     maxRings: 3,
     ...globeConfig,
-  };
+  }), [globeConfig]);
 
-  useEffect(() => {
-    if (globeRef.current) {
-      _buildData();
-      _buildMaterial();
-    }
-  }, [globeRef.current]);
-
-  const _buildMaterial = () => {
+  const _buildMaterial = useCallback(() => {
     if (!globeRef.current) return;
 
     const globeMaterial = globeRef.current.globeMaterial() as unknown as {
@@ -111,11 +105,11 @@ export function Globe({ globeConfig, data }: WorldProps) {
     globeMaterial.emissive = new Color(globeConfig.emissive);
     globeMaterial.emissiveIntensity = globeConfig.emissiveIntensity || 0.1;
     globeMaterial.shininess = globeConfig.shininess || 0.9;
-  };
+  }, [globeRef, globeConfig]);
 
-  const _buildData = () => {
+  const _buildData = useCallback(() => {
     const arcs = data;
-    let points = [];
+    const points = [];
     for (let i = 0; i < arcs.length; i++) {
       const arc = arcs[i];
       const rgb = hexToRgb(arc.color) as { r: number; g: number; b: number };
@@ -146,25 +140,16 @@ export function Globe({ globeConfig, data }: WorldProps) {
     );
 
     setGlobeData(filteredPoints);
-  };
+  }, [data, defaultProps]);
 
   useEffect(() => {
-    if (globeRef.current && globeData) {
-      globeRef.current
-        .hexPolygonsData(countries.features)
-        .hexPolygonResolution(3)
-        .hexPolygonMargin(0.7)
-        .showAtmosphere(defaultProps.showAtmosphere)
-        .atmosphereColor(defaultProps.atmosphereColor)
-        .atmosphereAltitude(defaultProps.atmosphereAltitude)
-        .hexPolygonColor((e) => {
-          return defaultProps.polygonColor;
-        });
-      startAnimation();
+    if (globeRef.current) {
+      _buildData();
+      _buildMaterial();
     }
-  }, [globeData]);
+  }, [_buildData, _buildMaterial]);
 
-  const startAnimation = () => {
+  const startAnimation = useCallback(() => {
     if (!globeRef.current || !globeData) return;
 
     globeRef.current
@@ -200,7 +185,23 @@ export function Globe({ globeConfig, data }: WorldProps) {
       .ringRepeatPeriod(
         (defaultProps.arcTime * defaultProps.arcLength) / defaultProps.rings
       );
-  };
+  }, [globeRef, globeData, data, defaultProps]);
+
+  useEffect(() => {
+    if (globeRef.current && globeData) {
+      globeRef.current
+        .hexPolygonsData(countries.features)
+        .hexPolygonResolution(3)
+        .hexPolygonMargin(0.7)
+        .showAtmosphere(defaultProps.showAtmosphere)
+        .atmosphereColor(defaultProps.atmosphereColor)
+        .atmosphereAltitude(defaultProps.atmosphereAltitude)
+        .hexPolygonColor((e) => {
+          return defaultProps.polygonColor;
+        });
+      startAnimation();
+    }
+  }, [globeData, defaultProps, globeRef, startAnimation]);
 
   useEffect(() => {
     if (!globeRef.current || !globeData) return;
@@ -221,7 +222,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
     return () => {
       clearInterval(interval);
     };
-  }, [globeRef.current, globeData]);
+  }, [globeData, data]);
 
   return (
     <>
@@ -237,7 +238,7 @@ export function WebGLRendererConfig() {
     gl.setPixelRatio(window.devicePixelRatio);
     gl.setSize(size.width, size.height);
     gl.setClearColor(0xffaaff, 0);
-  }, []);
+  }, [gl, size]);
 
   return null;
 }
@@ -247,20 +248,20 @@ export function World(props: WorldProps) {
   const scene = new Scene();
   scene.fog = new Fog(0xffffff, 400, 2000);
   return (
-    <Canvas scene={scene} camera={new PerspectiveCamera(50, aspect, 180, 1800)}>
+    <Canvas scene={scene as any} camera={new PerspectiveCamera(50, aspect, 180, 1800) as any}>
       <WebGLRendererConfig />
       <ambientLight color={globeConfig.ambientLight} intensity={0.6} />
       <directionalLight
         color={globeConfig.directionalLeftLight}
-        position={new Vector3(-400, 100, 400)}
+        position={new Vector3(-400, 100, 400) as any}
       />
       <directionalLight
         color={globeConfig.directionalTopLight}
-        position={new Vector3(-200, 500, 200)}
+        position={new Vector3(-200, 500, 200) as any}
       />
       <pointLight
         color={globeConfig.pointLight}
-        position={new Vector3(-200, 500, 200)}
+        position={new Vector3(-200, 500, 200) as any}
         intensity={0.8}
       />
       <Globe {...props} />
@@ -276,30 +277,4 @@ export function World(props: WorldProps) {
       />
     </Canvas>
   );
-}
-
-export function hexToRgb(hex: string) {
-  var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-  hex = hex.replace(shorthandRegex, function (m, r, g, b) {
-    return r + r + g + g + b + b;
-  });
-
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16),
-      }
-    : null;
-}
-
-export function genRandomNumbers(min: number, max: number, count: number) {
-  const arr = [];
-  while (arr.length < count) {
-    const r = Math.floor(Math.random() * (max - min)) + min;
-    if (arr.indexOf(r) === -1) arr.push(r);
-  }
-
-  return arr;
 }

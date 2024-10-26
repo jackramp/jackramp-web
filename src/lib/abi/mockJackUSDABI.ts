@@ -1,6 +1,32 @@
 export const mockJackUSDABI = [
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_underlyingUSD",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_alignedServiceManager",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_paymentServiceAddr",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "_elfCommitment",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "address",
+                "name": "_reclaimHide",
+                "type": "address"
+            }
+        ],
         "stateMutability": "nonpayable",
         "type": "constructor"
     },
@@ -103,6 +129,52 @@ export const mockJackUSDABI = [
     },
     {
         "inputs": [],
+        "name": "InvalidReclaimProof",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "OfframpRequestAlreadyExists",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "OfframpRequestAlreadyProved",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "OfframpRequestAmountIsZero",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "OfframpRequestChannelAccountIsEmpty",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "OfframpRequestChannelIdIsEmpty",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "OfframpRequestDoesNotExist",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "fullHash",
+                "type": "bytes32"
+            }
+        ],
+        "name": "ProofAlreadyUsed",
+        "type": "error"
+    },
+    {
+        "inputs": [],
         "name": "ProofGeneratorAddrMismatch",
         "type": "error"
     },
@@ -114,6 +186,22 @@ export const mockJackUSDABI = [
     {
         "inputs": [],
         "name": "PubInputCommitmentMismatch",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "hashedClaimInfo",
+                "type": "bytes32"
+            }
+        ],
+        "name": "ReclaimProofAlreadyUsed",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "ReentrancyGuardReentrantCall",
         "type": "error"
     },
     {
@@ -205,6 +293,52 @@ export const mockJackUSDABI = [
             }
         ],
         "name": "Mint",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "requestOfframpId",
+                "type": "bytes32"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "address",
+                        "name": "user",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "amount",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "amountRealWorld",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "bytes32",
+                        "name": "channelAccount",
+                        "type": "bytes32"
+                    },
+                    {
+                        "internalType": "bytes32",
+                        "name": "channelId",
+                        "type": "bytes32"
+                    }
+                ],
+                "indexed": false,
+                "internalType": "struct Jackramp.OfframpRequestParams",
+                "name": "params",
+                "type": "tuple"
+            }
+        ],
+        "name": "RequestOfframp",
         "type": "event"
     },
     {
@@ -341,6 +475,19 @@ export const mockJackUSDABI = [
                 "type": "uint8"
             }
         ],
+        "stateMutability": "pure",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "elfCommitment",
+        "outputs": [
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
         "stateMutability": "view",
         "type": "function"
     },
@@ -419,6 +566,60 @@ export const mockJackUSDABI = [
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "name": "offrampRequests",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amountRealWorld",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "channelAccount",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "channelId",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "bool",
+                "name": "isProved",
+                "type": "bool"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "proof",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "reclaimProof",
+                "type": "bytes32"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "paymentServiceAddr",
         "outputs": [
@@ -429,6 +630,59 @@ export const mockJackUSDABI = [
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "reclaimHide",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "address",
+                        "name": "user",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "amount",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "amountRealWorld",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "bytes32",
+                        "name": "channelAccount",
+                        "type": "bytes32"
+                    },
+                    {
+                        "internalType": "bytes32",
+                        "name": "channelId",
+                        "type": "bytes32"
+                    }
+                ],
+                "internalType": "struct Jackramp.OfframpRequestParams",
+                "name": "params",
+                "type": "tuple"
+            }
+        ],
+        "name": "requestOfframp",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -527,51 +781,35 @@ export const mockJackUSDABI = [
         "inputs": [
             {
                 "internalType": "bytes32",
-                "name": "proofCommitment",
+                "name": "",
                 "type": "bytes32"
-            },
-            {
-                "internalType": "bytes32",
-                "name": "pubInputCommitment",
-                "type": "bytes32"
-            },
-            {
-                "internalType": "bytes32",
-                "name": "provingSystemAuxDataCommitment",
-                "type": "bytes32"
-            },
-            {
-                "internalType": "bytes20",
-                "name": "proofGeneratorAddr",
-                "type": "bytes20"
-            },
-            {
-                "internalType": "bytes32",
-                "name": "batchMerkleRoot",
-                "type": "bytes32"
-            },
-            {
-                "internalType": "bytes",
-                "name": "merkleProof",
-                "type": "bytes"
-            },
-            {
-                "internalType": "uint256",
-                "name": "verificationDataBatchIndex",
-                "type": "uint256"
-            },
-            {
-                "internalType": "bytes",
-                "name": "pubInputBytes",
-                "type": "bytes"
             }
         ],
-        "name": "verifyFillOfframp",
+        "name": "usedProofs",
         "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
             {
                 "internalType": "bytes32",
                 "name": "",
                 "type": "bytes32"
+            }
+        ],
+        "name": "usedReclaimProofs",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
             }
         ],
         "stateMutability": "view",

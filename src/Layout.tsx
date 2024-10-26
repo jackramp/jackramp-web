@@ -6,6 +6,7 @@ import { config } from './lib/wagmi'
 import Navbar from './components/bar/Navbar';
 import { holesky } from 'viem/chains';
 import { Toaster } from 'sonner';
+import { BackgroundGradientAnimation } from './components/ui/background-gradient-animation';
 const queryClient = new QueryClient();
 
 export const CustomRainbowContext = ({ children }: { children: React.ReactNode }) => {
@@ -33,7 +34,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <CustomRainbowContext>
                     <Toaster toastOptions={{ duration: 3000 }} />
                     <Navbar />
-                    {children}
+                    <BackgroundGradientAnimation>
+                        {children}
+                    </BackgroundGradientAnimation>
                 </CustomRainbowContext>
             </QueryClientProvider>
         </WagmiProvider>

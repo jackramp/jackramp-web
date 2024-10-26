@@ -1,4 +1,4 @@
-export const mockERC20ABI = [
+export const mockM0ABI = [
     {
         "inputs": [],
         "stateMutability": "nonpayable",
@@ -217,7 +217,7 @@ export const mockERC20ABI = [
                 "type": "uint8"
             }
         ],
-        "stateMutability": "view",
+        "stateMutability": "pure",
         "type": "function"
     },
     {

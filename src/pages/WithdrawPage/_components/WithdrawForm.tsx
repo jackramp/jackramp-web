@@ -7,7 +7,7 @@ import { CurrencyInput } from "./CurrencyInput";
 import { WithdrawMethod } from "./WithdrawMethod";
 import { ProcessingInfo } from "./ProcessingInfo";
 import { useAccount } from "wagmi";
-import { useERC20Balance } from "@/hooks/useERC20Balance";
+import { useM0Balance } from "@/hooks/useM0Balance";
 import { HexAddress } from "@/types";
 import { ADDRESS_JACKUSD, USDC_DECIMALS } from "@/constants/config";
 import { Label } from "@/components/ui/label";
@@ -24,7 +24,7 @@ interface FormData {
 export const WithdrawForm = (props: FormData) => {
     const [amount, setAmount] = useState("0");
     const { address } = useAccount();
-    const { balance, loading: balanceLoading } = useERC20Balance(address as HexAddress, ADDRESS_JACKUSD);
+    const { balance, loading: balanceLoading } = useM0Balance(address as HexAddress, ADDRESS_JACKUSD);
 
     const {
         isAlertOpen,

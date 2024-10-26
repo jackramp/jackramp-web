@@ -15,19 +15,32 @@ export interface CoinItem {
     image: string;
 }
 
-export interface TransactionContract {
-    account: string;
-    productId: number;
-    timestamp: number;
-    marketplaceId: number;
-    proved: boolean;
-    link: string;
-}
-
 export interface LiquidityContract {
     token: string;
     platform: string;
     depositor: string;
     amount: number;
     conversionRate: number;
+}
+
+export interface RequestOffRamps {
+    blockNumber: string;
+    blockTimestamp: string;
+    id: string;
+    params_amount: string;
+    params_amountRealWorld: string;
+    params_channelAccount: string;
+    params_channelId: string;
+    params_user: string;
+    requestOfframpId: string;
+    transactionHash: string;
+}
+
+export interface Mint {
+    amount: string
+    blockNumber: string
+    blockTimestamp: string
+    transactionHash: string
+    user: string
+    id: string
 }

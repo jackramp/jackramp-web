@@ -38,7 +38,7 @@ export const CurrencyInput = ({
                     <img
                         src={coin.image}
                         alt={coin.symbol}
-                        className="w-5 h-5 rounded-full"
+                        className="w-7 h-7 rounded-full"
                     />
                     <Label>
                         {coin.symbol}

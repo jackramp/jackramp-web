@@ -11,9 +11,7 @@
 }
 
 body {
-  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  overflow-x: hidden;
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 @layer base {
@@ -45,9 +43,6 @@ body {
     --chart-5: 340 75% 55%;
     --text-secondary-emerald: 210, 100%, 56%;
     --radius: 0.5rem;
-
-    --jackramp-color-primary: hsl(200, 100%, 50%);
-    --jackramp-color-background: hsl(240, 8%, 28%);
   }
 }
 

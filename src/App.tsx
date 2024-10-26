@@ -9,14 +9,12 @@ import { MintPage } from './pages/MintPage/Index';
 import { WithdrawPage } from './pages/WithdrawPage/Index';
 import { ProofPage } from './pages/ProofPage/Index';
 import { LiquidityPage } from './pages/LiquidityPage/Index';
-import { RadialBackground } from './components/ui/radial-background';
 
 function App() {
 
   return (
     <>
       <LoadingBar />
-      <RadialBackground/>
       <Layout>
         <Routes>
           <Route path='/' element={<HomePage />} />

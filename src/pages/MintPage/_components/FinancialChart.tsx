@@ -66,7 +66,7 @@ const CustomTooltip = ({ active, payload }: TooltipProps) => {
                 <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full bg-green-400" />
                     <p className="text-white text-sm font-medium">
-                        {payload[0]?.value?.toFixed(2)} USDC
+                        {payload[0]?.value?.toFixed(2)} M0
                     </p>
                 </div>
                 <div className="flex items-center gap-2 mt-1">
@@ -145,13 +145,13 @@ const FinancialChart = () => {
     }
 
     return (
-        <div className="w-full space-y-4">
+        <div className="w-full space-y-4 bg-black/20 rounded-lg p-5">
             <div className="flex gap-2">
                 {periods.map((period) => (
                     <Button
                         key={period.label}
                         onClick={() => setSelectedPeriod(period)}
-                        variant={selectedPeriod.label === period.label ? "default" : "outline"}
+                        variant={selectedPeriod.label === period.label ? "default" : "ghost"}
                         className="px-4 py-2"
                     >
                         {period.label}
@@ -175,7 +175,7 @@ const FinancialChart = () => {
                             dataKey="date"
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#6b7280', fontSize: 12 }}
+                            tick={{ fill: '#abb8d1', fontSize: 12 }}
                             padding={{ left: 20, right: 20 }}
                             tickFormatter={formatXAxis}
                             interval="preserveStartEnd"
@@ -184,7 +184,7 @@ const FinancialChart = () => {
                             orientation="right"
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#6b7280', fontSize: 12 }}
+                            tick={{ fill: '#abb8d1', fontSize: 12 }}
                             domain={['auto', 'auto']}
                             tickFormatter={(value) => `${value.toFixed(2)} jackUSD`}
                             tickCount={7}

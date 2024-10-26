@@ -1,31 +1,29 @@
-import { columns } from "@/components/tables/proof/columns";
-import { DataTable } from "@/components/tables/proof/DataTable";
+import { columns } from "@/components/tables/mint/columns";
+import { DataTable } from "@/components/tables/mint/DataTable";
 import { useEffect, useState } from "react";
 import { gql, request } from 'graphql-request';
 import { useQuery } from "@tanstack/react-query";
-import { RequestOffRamps } from "@/types";
+import { Mint } from "@/types";
+import { useAccount } from "wagmi";
 
 const query = gql`{
-    requestOfframps(orderBy: blockTimestamp, orderDirection: desc) {
+    mints(orderDirection: desc, orderBy: blockTimestamp) {
+        amount
         blockNumber
         blockTimestamp
-        id
-        params_amount
-        params_amountRealWorld
-        params_channelAccount
-        params_channelId
-        params_user
-        requestOfframpId
         transactionHash
+        user
+        id
     }
 }`
 
 type QueryData = {
-    requestOfframps: RequestOffRamps[];
+    mints: Mint[];
 };
 
-export default function TableProof() {
+export default function TableMint() {
     const [hasMounted, setHasMounted] = useState(false);
+    const { address } = useAccount();
 
     useEffect(() => {
         setHasMounted(true);
@@ -45,6 +43,8 @@ export default function TableProof() {
         refetch();
     };
 
+    const filteredMints = address ? data?.mints.filter((mint: Mint) => mint.user.toLocaleLowerCase() === address.toLocaleLowerCase()) : [];
+
     if (!hasMounted) {
         return null;
     }
@@ -52,7 +52,7 @@ export default function TableProof() {
     return (
         <div className="w-full space-y-4 p-5 h-auto z-10">
             <DataTable
-                data={data?.requestOfframps || []}
+                data={filteredMints || []}
                 columns={columns()}
                 handleRefresh={handleRefresh}
                 isLoading={isLoading}

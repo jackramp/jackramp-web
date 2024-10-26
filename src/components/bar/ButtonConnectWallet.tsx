@@ -1,7 +1,7 @@
 import { BackgroundGradient } from "../ui/background-gradient";
 import { Button } from "../ui/button";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useERC20Balance } from "@/hooks/useERC20Balance";
+import { useM0Balance } from "@/hooks/useM0Balance";
 import { useAccount } from "wagmi";
 import { ADDRESS_JACKUSD } from "@/constants/config";
 import { HexAddress } from "@/types";
@@ -59,7 +59,7 @@ export function ButtonConnectWallet() {
 
 export const ConnectButtonWalletComponents = () => {
     const { address } = useAccount();
-    const { balance, error } = useERC20Balance(address as HexAddress, ADDRESS_JACKUSD);
+    const { balance, error } = useM0Balance(address as HexAddress, ADDRESS_JACKUSD);
 
     return (
         <ConnectButton.Custom>
@@ -115,7 +115,7 @@ export const ConnectButtonWalletComponents = () => {
                             {error ? (
                                 'Error loading balance'
                             ) : (
-                                balance ? (balance.toString()) : 'Loading...'
+                                balance ? (balance.toString()) : '0'
                             )}
                         </GradientButton>
 

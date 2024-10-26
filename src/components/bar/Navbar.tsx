@@ -1,7 +1,7 @@
 import { useLocation, Link } from 'react-router-dom';
 import { Label } from "../ui/label";
 import Logo from "./Logo";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Menu, Home, ArrowRightLeft, CirclePlus, CircleCheckBig, CircleArrowOutDownLeft, Wallet } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { ButtonConnectWallet } from './ButtonConnectWallet';
@@ -28,24 +28,10 @@ export default function Navbar() {
 function MobileNavbar() {
   const { pathname } = useLocation();
   const [isOpen, setIsOpen] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setHasScrolled(window.scrollY > 0);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
     <div
-      className={`fixed z-40 h-fit w-full py-5 xl:hidden transition-colors duration-200`}
-      style={{
-        backgroundColor: hasScrolled ? 'rgba(128, 128, 128, 0.1)' : 'transparent',
-        backdropFilter: hasScrolled ? 'blur(8px)' : 'none'
-      }}
+      className={`fixed z-40 h-fit w-full py-5 xl:hidden transition-colors duration-200 bg-gradient-to-b from-black/50 to-transparent backdrop-blur-sm`}
     >
       <nav className="flex items-center justify-between px-5 sm:px-[40px]">
         <Logo />
@@ -97,24 +83,10 @@ function MobileNavbar() {
 
 function DesktopNavbar() {
   const { pathname } = useLocation();
-  const [hasScrolled, setHasScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setHasScrolled(window.scrollY > 0);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
     <div
-      className={`fixed z-40 hidden h-fit w-full xl:block transition-colors duration-200`}
-      style={{
-        backgroundColor: hasScrolled ? 'rgba(128, 128, 128, 0.1)' : 'transparent',
-        backdropFilter: hasScrolled ? 'blur(8px)' : 'none'
-      }}
+      className={`navbar fixed z-40 hidden w-full h-fit xl:block transition-colors duration-200 bg-gradient-to-b from-black/50 to-transparent backdrop-blur-sm`}
     >
       <nav className="flex justify-between items-center gap-x-4 p-5 px-[40px]">
         <div className='flex flex-row justify-start items-center gap-10'>

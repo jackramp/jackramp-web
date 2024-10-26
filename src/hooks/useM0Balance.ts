@@ -2,14 +2,14 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { readContract } from "@wagmi/core";
 import { config } from "@/lib/wagmi";
 import { HexAddress } from "@/types";
-import { mockERC20ABI } from "@/lib/abi/mockERC20ABI";
+import { mockM0ABI } from "@/lib/abi/mockM0ABI";
 
-interface UseERC20BalanceOptions {
+interface UseM0BalanceOptions {
     debounceTime?: number;
     enabled?: boolean;
 }
 
-interface UseERC20BalanceResult {
+interface UseM0BalanceResult {
     balance: bigint | undefined;
     loading: boolean;
     error: Error | null;
@@ -17,11 +17,11 @@ interface UseERC20BalanceResult {
     isStale: boolean;
 }
 
-export const useERC20Balance = (
+export const useM0Balance = (
     address: HexAddress,
     token: HexAddress,
-    options: UseERC20BalanceOptions = {}
-): UseERC20BalanceResult => {
+    options: UseM0BalanceOptions = {}
+): UseM0BalanceResult => {
     const { debounceTime = 1000, enabled = true } = options;
 
     const [balance, setBalance] = useState<bigint | undefined>(undefined);
@@ -47,7 +47,7 @@ export const useERC20Balance = (
         try {
             const result = await readContract(config, {
                 address: token,
-                abi: mockERC20ABI,
+                abi: mockM0ABI,
                 functionName: 'balanceOf',
                 args: [address],
             });
@@ -59,7 +59,7 @@ export const useERC20Balance = (
                 : new Error('Failed to fetch balance');
             
             setError(error);
-            console.error('Error fetching ERC20 balance:', error);
+            console.error('Error fetching M0 balance:', error);
         } finally {
             setLoading(false);
         }
@@ -80,7 +80,7 @@ export const useERC20Balance = (
             fetchBalance();
             intervalId = setInterval(() => {
                 refreshBalance();
-            }, 2000);
+            }, 5000);
         }
 
         return () => {

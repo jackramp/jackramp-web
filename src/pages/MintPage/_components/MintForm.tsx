@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { defaultCoin } from "@/constants/default-coin";
+import { m0Coin } from "@/constants/m0-coin";
 import { CurrencyInput } from "./CurrencyInput";
 import { useAccount } from "wagmi";
 import { ADDRESS_MOCKERC20 } from "@/constants/config";
@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import { useInsufficientBalance } from "@/hooks/useInsufficientBalance";
 import { HexAddress } from "@/types";
 import { LoadingTransaction } from "@/components/loader/LoadingTransaction";
-import { SuccessDialog } from "./SuccessDialog";
+import { SuccessDialog } from "../../SwapPage/_components/SuccessDialog";
 
 interface FormData {
     confirmed: boolean;
@@ -119,7 +119,7 @@ export const MintForm = () => {
                                 <CurrencyInput
                                     value={amount}
                                     onChange={handleAmountChange}
-                                    coin={defaultCoin}
+                                    coin={m0Coin}
                                 />
                             </motion.div>
                         </div>

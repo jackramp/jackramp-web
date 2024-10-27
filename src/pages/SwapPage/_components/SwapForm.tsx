@@ -15,7 +15,7 @@ import { CurrencyInput } from "@/components/card/CurrencyInput";
 import { Method } from "@/components/card/Method";
 import { ProcessingInfo } from "@/components/card/ProcessingInfo";
 import { SuccessDialog } from "@/components/dialog/SuccessDialog";
-import { m0Coin } from "@/constants/m0-coin";
+import { rpCurrency } from "@/constants/rpCurrency";
 import { ArrowDownUp } from "lucide-react";
 import { bank } from "@/constants/bank";
 import {
@@ -153,7 +153,7 @@ export const SwapForm = () => {
                                 <CurrencyInput
                                     value={amount}
                                     onChange={handleAmountChange}
-                                    coin={m0Coin}
+                                    coin={rpCurrency}
                                     disabled
                                 />
                             </motion.div>

@@ -2,6 +2,10 @@
 
 JackRamp is a decentralized USD off-ramp solution powered by ZkVM technology, enabling seamless conversion between crypto and USD. The platform features JackUSD and M0 tokens, with M0 serving as the mining token for JackUSD.
 
+## 📧 Docs
+
+Project Documentation : [https://kbaji.gitbook.io/jackramp](https://kbaji.gitbook.io/jackramp)
+
 ## 🌟 Features
 
 ### Core Functionality
@@ -119,7 +123,3 @@ query OffRamps {
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 📧 Contact
-
-Project Link: [https://github.com/jackramp/jackramp-web](https://github.com/jackramp/jackramp-web)

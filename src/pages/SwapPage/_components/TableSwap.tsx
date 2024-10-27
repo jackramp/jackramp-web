@@ -1,5 +1,5 @@
-import { columns } from "@/components/tables/proof/columns";
-import { DataTable } from "@/components/tables/proof/DataTable";
+import { columns } from "@/components/tables/swap/columns";
+import { DataTable } from "@/components/tables/swap/DataTable";
 import { useEffect, useState } from "react";
 import { request } from 'graphql-request';
 import { useQuery } from "@tanstack/react-query";

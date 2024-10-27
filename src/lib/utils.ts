@@ -15,7 +15,7 @@ export function formatAddress(inputString: string): string {
 }
 
 export function convertBigIntToNumber(bigIntValue: bigint): number {
-  return Number(bigIntValue) / 1_000_000_000_000_000_000;
+  return Number(bigIntValue) / 1_000_000;
 }
 
 export function convertTimestampToDate(timestamp: number): string {

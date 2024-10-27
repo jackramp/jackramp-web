@@ -21,12 +21,7 @@ export const useSwap = () => {
         hash: swapHash,
     });
 
-    const rekeningBank = "1234567890"
-    const hashRekening = keccak256(toHex(rekeningBank));
-
-    const channelId = keccak256(toHex("1"))
-
-    const handleSwap = async (amount: string) => {
+    const handleSwap = async (amount: string, channelId: string, channelAccount: string) => {
         try {
             await writeSwap({
                 abi: mockJackUSDABI,
@@ -36,8 +31,8 @@ export const useSwap = () => {
                     user: address as HexAddress,
                     amount: BigInt(amount),
                     amountRealWorld: BigInt(amount),
-                    channelAccount: hashRekening,
-                    channelId: channelId
+                    channelAccount: keccak256(toHex(channelAccount)),
+                    channelId: keccak256(toHex(channelId.toLowerCase()))
                 }],
             });
 

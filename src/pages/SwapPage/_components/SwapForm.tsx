@@ -17,6 +17,16 @@ import { ProcessingInfo } from "@/components/card/ProcessingInfo";
 import { SuccessDialog } from "@/components/dialog/SuccessDialog";
 import { m0Coin } from "@/constants/m0-coin";
 import { ArrowDownUp } from "lucide-react";
+import { bank } from "@/constants/bank";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 
 interface FormData {
     confirmed: boolean;
@@ -26,80 +36,95 @@ export const SwapForm = () => {
     const [amount, setAmount] = useState("");
     const { address } = useAccount();
     const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+    const [selectedBank, setSelectedBank] = useState(bank[0]);
+    const [channelAccount, setChannelAccount] = useState("");
 
-    const {
-        insufficientBalance,
-    } = useInsufficientBalance(
+    const { insufficientBalance } = useInsufficientBalance(
         address as HexAddress,
         ADDRESS_MOCKERC20,
         amount
     );
 
-    const {
-        swapHash,
-        isSwapPending,
-        isSwapConfirming,
-        isSwapConfirmed,
-        handleSwap,
-    } = useSwap();
+    const { swapHash, isSwapPending, isSwapConfirming, isSwapConfirmed, handleSwap } =
+        useSwap();
 
     const form = useForm<FormData>({
-        defaultValues: {}
+        defaultValues: {},
     });
 
     const handleAmountChange = useCallback((value: string) => {
         setAmount(value);
     }, []);
 
+    const handleChannelAccountChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setChannelAccount(e.target.value);
+    }, []);
+
     useEffect(() => {
         if (isSwapConfirmed && !isSwapConfirming) {
             setShowSuccessDialog(true);
             form.reset();
+            setChannelAccount(""); // Reset channel account on success
         }
     }, [isSwapConfirming, isSwapConfirmed, form]);
 
+    const handleBankSelect = (value: string) => {
+        const selected = bank.find((b) => b.name === value);
+        if (selected) {
+            setSelectedBank(selected);
+        }
+    };
+
     const handleSubmit = useCallback(async () => {
         if (insufficientBalance) {
-            toast.error('Invalid amount or not enough balance!');
+            toast.error("Invalid amount or not enough balance!");
+            return;
+        }
+        if (!selectedBank) {
+            toast.error("Please select a bank!");
+            return;
+        }
+        if (!channelAccount.trim()) {
+            toast.error("Please enter a bank number!");
             return;
         }
         setShowSuccessDialog(false);
-        await handleSwap(amount);
-    }, [amount, insufficientBalance, handleSwap]);
+        await handleSwap(amount, selectedBank.name, channelAccount);
+    }, [amount, insufficientBalance, handleSwap, selectedBank, channelAccount]);
 
-    const isSubmitDisabled = useMemo(() =>
-        isSwapPending ||
-        isSwapConfirming ||
-        insufficientBalance ||
-        typeof amount === 'undefined' ||
-        amount === '',
-        [
-            isSwapPending,
-            isSwapConfirming,
-            insufficientBalance,
-            amount
-        ]
+    const isSubmitDisabled = useMemo(
+        () =>
+            isSwapPending ||
+            isSwapConfirming ||
+            insufficientBalance ||
+            typeof amount === "undefined" ||
+            amount === "" ||
+            !selectedBank ||
+            !channelAccount.trim(),
+        [isSwapPending, isSwapConfirming, insufficientBalance, amount, selectedBank, channelAccount]
     );
 
     const buttonText = useMemo(() => {
         if (isSwapPending || isSwapConfirming) {
-            return 'Swaping...';
+            return "Swapping...";
         }
         if (insufficientBalance) {
-            return 'Insufficient balance';
+            return "Insufficient balance";
         }
-        return 'Swap';
-    }, [isSwapPending, isSwapConfirming, insufficientBalance]);
+        if (!selectedBank) {
+            return "Select a bank";
+        }
+        if (!channelAccount.trim()) {
+            return "Enter bank number";
+        }
+        return "Swap";
+    }, [isSwapPending, isSwapConfirming, insufficientBalance, selectedBank, channelAccount]);
 
     return (
         <>
             {(isSwapPending || isSwapConfirming) && (
                 <LoadingTransaction
-                    message={
-                        isSwapPending
-                            ? 'Swapping...'
-                            : 'Confirming swapping...'
-                    }
+                    message={isSwapPending ? "Swapping..." : "Confirming swapping..."}
                 />
             )}
             <Form {...form}>
@@ -135,24 +160,57 @@ export const SwapForm = () => {
                         </div>
                         <div className="flex flex-row gap-5">
                             <Method
-                                value={"jackramp"}
-                                title={"JackRamp"}
-                                duration={"Realtime"}
-                                rate={"1-1"}
+                                value="jackramp"
+                                title="JackRamp"
+                                duration="Realtime"
+                                rate="1-1"
                                 onClick={() => { }}
                             />
                             <Method
-                                value={"-"}
-                                title={"Available Soon"}
-                                duration={"-"}
-                                rate={"-"}
+                                value="-"
+                                title="Available Soon"
+                                duration="-"
+                                rate="-"
                                 onClick={() => { }}
                             />
                         </div>
-                        <ProcessingInfo
-                            method={"jackramp"}
-                            networkFee={"-"}
+                        <div className="w-full">
+                            <Select onValueChange={handleBankSelect} defaultValue={selectedBank.name}>
+                                <SelectTrigger className="w-full h-14 px-4 bg-transparent border-gray-500 border-[3px] rounded-xl">
+                                    <div className="flex items-center gap-2">
+                                        <SelectValue placeholder="Select a bank" />
+                                    </div>
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        {bank.map((bankOption) => (
+                                            <SelectItem
+                                                key={bankOption.name}
+                                                value={bankOption.name}
+                                                className="flex items-center gap-2 p-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
+                                            >
+                                                <div className="flex items-center gap-2">
+                                                    <img
+                                                        src={bankOption.image}
+                                                        alt={bankOption.name}
+                                                        className="w-12 h-8 px-2 object-contain bg-white rounded-lg"
+                                                    />
+                                                    <span>{bankOption.name}</span>
+                                                </div>
+                                            </SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <Input 
+                            type="text"
+                            className="bg-transparent border-gray-500 border-[3px] px-5 py-6 rounded-xl"
+                            value={channelAccount}
+                            onChange={handleChannelAccountChange}
+                            placeholder="Bank Number"
                         />
+                        <ProcessingInfo method="jackramp" networkFee="-" />
                         <Button
                             type="submit"
                             className="w-full rounded-xl"
@@ -166,9 +224,9 @@ export const SwapForm = () => {
             <SuccessDialog
                 isOpen={showSuccessDialog}
                 onClose={() => setShowSuccessDialog(false)}
-                txHash={swapHash || ''}
+                txHash={swapHash || ""}
                 amount={amount}
-                processName={'Swap'}
+                processName="Swap"
             />
         </>
     );

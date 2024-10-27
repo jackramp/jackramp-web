@@ -50,6 +50,16 @@ export function columns(): ColumnDef<OffRamps>[] {
       ),
     },
     {
+      accessorKey: "blockTimestamp",
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="Block Timestamp"
+        />
+      ),
+      cell: ({ row }) => <div>{formatNullableTimestamp(row.original.blockTimestamp)}</div>,
+    },
+    {
       accessorKey: "user",
       header: ({ column }) => (
         <DataTableColumnHeader
@@ -134,16 +144,6 @@ export function columns(): ColumnDef<OffRamps>[] {
         />
       ),
       cell: ({ row }) => <div>{formatNullableData(row.original.blockNumber)}</div>,
-    },
-    {
-      accessorKey: "blockTimestamp",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Block Timestamp"
-        />
-      ),
-      cell: ({ row }) => <div>{formatNullableTimestamp(row.original.blockTimestamp)}</div>,
     },
     {
       accessorKey: "channelAccount",

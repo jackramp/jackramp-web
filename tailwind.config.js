@@ -63,51 +63,51 @@ export default {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			colors: {
-				background: 'hsl(var(--background))',
-				foreground: 'hsl(var(--foreground))',
+				background: 'hsla(var(--background))',
+				foreground: 'hsla(var(--foreground))',
 				card: {
-					DEFAULT: 'hsl(var(--card))',
-					foreground: 'hsl(var(--card-foreground))'
+					DEFAULT: 'hsla(var(--card))',
+					foreground: 'hsla(var(--card-foreground))'
 				},
 				popover: {
-					DEFAULT: 'hsl(var(--popover))',
-					foreground: 'hsl(var(--popover-foreground))'
+					DEFAULT: 'hsla(var(--popover))',
+					foreground: 'hsla(var(--popover-foreground))'
 				},
 				primary: {
-					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					DEFAULT: 'hsla(var(--primary))',
+					foreground: 'hsla(var(--primary-foreground))'
 				},
 				secondary: {
-					DEFAULT: 'hsl(var(--secondary))',
-					foreground: 'hsl(var(--secondary-foreground))'
+					DEFAULT: 'hsla(var(--secondary))',
+					foreground: 'hsla(var(--secondary-foreground))'
 				},
 				muted: {
-					DEFAULT: 'hsl(var(--muted))',
-					foreground: 'hsl(var(--muted-foreground))'
+					DEFAULT: 'hsla(var(--muted))',
+					foreground: 'hsla(var(--muted-foreground))'
 				},
 				accent: {
-					DEFAULT: 'hsl(var(--accent))',
-					foreground: 'hsl(var(--accent-foreground))'
+					DEFAULT: 'hsla(var(--accent))',
+					foreground: 'hsla(var(--accent-foreground))'
 				},
 				destructive: {
-					DEFAULT: 'hsl(var(--destructive))',
-					foreground: 'hsl(var(--destructive-foreground))'
+					DEFAULT: 'hsla(var(--destructive))',
+					foreground: 'hsla(var(--destructive-foreground))'
 				},
 				zinc: {
-					DEFAULT: 'hsl(var(--zinc))',
-					foreground: 'hsl(var(--zinc-foreground))'
+					DEFAULT: 'hsla(var(--zinc))',
+					foreground: 'hsla(var(--zinc-foreground))'
 				},
-				border: 'hsl(var(--border))',
-				input: 'hsl(var(--input))',
-				ring: 'hsl(var(--ring))',
+				border: 'hsla(var(--border))',
+				input: 'hsla(var(--input))',
+				ring: 'hsla(var(--ring))',
 				chart: {
-					'1': 'hsl(var(--chart-1))',
-					'2': 'hsl(var(--chart-2))',
-					'3': 'hsl(var(--chart-3))',
-					'4': 'hsl(var(--chart-4))',
-					'5': 'hsl(var(--chart-5))'
+					'1': 'hsla(var(--chart-1))',
+					'2': 'hsla(var(--chart-2))',
+					'3': 'hsla(var(--chart-3))',
+					'4': 'hsla(var(--chart-4))',
+					'5': 'hsla(var(--chart-5))'
 				},
-				textSecondary: 'hsl(var(--text-secondary-emerald))'
+				textSecondary: 'hsla(var(--text-secondary-emerald))'
 			}
 		}
 	},

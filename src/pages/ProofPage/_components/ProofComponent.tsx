@@ -13,7 +13,7 @@ export const ProofComponent = () => {
                 <div className="text-center space-y-2 flex flex-col justify-center">
                     <h1 className="text-2xl font-bold">Proof</h1>
                     <p className="text-muted-foreground">
-                        Generate proof of your transaction
+                        List of generated proofs
                     </p>
                 </div>
                 <TableProof />

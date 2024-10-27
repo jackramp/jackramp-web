@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Color, Fog, PerspectiveCamera, Vector3 } from "three";
+import { Color, Fog, PerspectiveCamera, Scene, Vector3 } from "three";
 import ThreeGlobe from "three-globe";
 import { useThree, Object3DNode, Canvas, extend } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
@@ -235,14 +235,10 @@ export function WebGLRendererConfig() {
 
 export function World(props: WorldProps) {
     const { globeConfig } = props;
-
+    const scene = new Scene();
+    scene.fog = new Fog(0xffffff, 400, 2000);
     return (
-        <Canvas
-            onCreated={({ scene }) => {
-                scene.fog = new Fog(0xffffff, 400, 2000);
-            }}
-            camera={new PerspectiveCamera(50, aspect, 180, 1800)}
-        >
+        <Canvas scene={scene} camera={new PerspectiveCamera(50, aspect, 180, 1800)}>
             <WebGLRendererConfig />
             <ambientLight color={globeConfig.ambientLight} intensity={0.6} />
             <directionalLight

@@ -130,7 +130,7 @@ export const MintForm = () => {
                                 value={"jackramp"}
                                 title={"JackRamp"}
                                 duration={"Realtime"}
-                                rate={"0%"}
+                                rate={"1-1"}
                                 onClick={() => { }}
                             />
                             <Method

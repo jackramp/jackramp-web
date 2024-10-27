@@ -6,11 +6,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatterBigInt(num: bigint): string {
-  const formatted = (Number(num) / 1_000_000_000_000_000_000).toFixed(18).replace('.', ',');
-  return formatted;
-}
-
 export function formatAddress(inputString: string): string {
   if (inputString.length <= 8) return inputString;
 
@@ -21,10 +16,6 @@ export function formatAddress(inputString: string): string {
 
 export function convertBigIntToNumber(bigIntValue: bigint): number {
   return Number(bigIntValue) / 1_000_000_000_000_000_000;
-}
-
-export function convertNumberToBigInt(num: number): bigint {
-  return BigInt(num * 1_000_000_000_000_000_000);
 }
 
 export function convertTimestampToDate(timestamp: number): string {
@@ -48,12 +39,6 @@ export const toUSDCAmount = (amount: string): bigint => {
   const paddedFraction = fraction.padEnd(USDC_DECIMALS, '0').slice(0, USDC_DECIMALS);
   return BigInt(whole + paddedFraction);
 };
-
-export const formatterBigIntDecimal18 = (value: bigint): string => {
-  const scaledValue = value / BigInt(1_000_000_000_000_000_000);
-  const integerPart = scaledValue.toString();
-  return `${integerPart}`;
-}
 
 export function hexToRgb(hex: string) {
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -80,3 +65,15 @@ export function genRandomNumbers(min: number, max: number, count: number) {
 
   return arr;
 }
+
+export const formatNullableData = (data: string | null | undefined): string => {
+  return data || '-';
+};
+
+export const formatNullableAddress = (address: string | null | undefined): string => {
+  return address ? formatAddress(address) : '-';
+};
+
+export const formatNullableTimestamp = (timestamp: string | null | undefined): string => {
+  return timestamp ? convertTimestampToDate(parseInt(timestamp)) : '-';
+};

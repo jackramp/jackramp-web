@@ -3,9 +3,9 @@ import { DataTableColumnHeader } from "./ColumnHeader";
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
 import { convertTimestampToDate, formatAddress } from "@/lib/utils";
-import { RequestOffRamps } from "@/types";
+import { Swap } from "@/types";
 
-export type TransactionHistoryRow = RequestOffRamps;
+export type TransactionHistoryRow = Swap;
 
 const copyToClipboard = (text: string) => {
   navigator.clipboard.writeText(text).then(() => {
@@ -91,27 +91,27 @@ export function columns(): ColumnDef<TransactionHistoryRow>[] {
       ),
     },
     {
-      accessorKey: "params_amount",
+      accessorKey: "requestedAmount",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title="Amount"
+          title="Requested Amount"
         />
       ),
-      cell: ({ row }) => <div>{row.original.params_amount}</div>,
+      cell: ({ row }) => <div>{row.original.requestedAmount}</div>,
     },
     {
-      accessorKey: "params_amountRealWorld",
+      accessorKey: "requestedAmountRealWorld",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
           title="Real World Amount"
         />
       ),
-      cell: ({ row }) => <div>{row.original.params_amountRealWorld}</div>,
+      cell: ({ row }) => <div>{row.original.requestedAmountRealWorld}</div>,
     },
     {
-      accessorKey: "params_channelAccount",
+      accessorKey: "channelAccount",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -120,9 +120,9 @@ export function columns(): ColumnDef<TransactionHistoryRow>[] {
       ),
       cell: ({ row }) => (
         <div className="flex items-center truncate w-fit justify-between">
-          <span className="mr-2">{formatAddress(row.original.params_channelAccount)}</span>
+          <span className="mr-2">{formatAddress(row.original.channelAccount)}</span>
           <button
-            onClick={() => copyToClipboard(row.original.params_channelAccount)}
+            onClick={() => copyToClipboard(row.original.channelAccount)}
             aria-label="Copy to clipboard"
             className="text-gray-500 hover:text-gray-700 focus:outline-none"
           >
@@ -132,7 +132,7 @@ export function columns(): ColumnDef<TransactionHistoryRow>[] {
       ),
     },
     {
-      accessorKey: "params_channelId",
+      accessorKey: "channelId",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -141,9 +141,9 @@ export function columns(): ColumnDef<TransactionHistoryRow>[] {
       ),
       cell: ({ row }) => (
         <div className="flex items-center truncate w-fit justify-between">
-          <span className="mr-2">{formatAddress(row.original.params_channelId)}</span>
+          <span className="mr-2">{formatAddress(row.original.channelId)}</span>
           <button
-            onClick={() => copyToClipboard(row.original.params_channelId)}
+            onClick={() => copyToClipboard(row.original.channelId)}
             aria-label="Copy to clipboard"
             className="text-gray-500 hover:text-gray-700 focus:outline-none"
           >
@@ -153,7 +153,7 @@ export function columns(): ColumnDef<TransactionHistoryRow>[] {
       ),
     },
     {
-      accessorKey: "params_user",
+      accessorKey: "user",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -162,30 +162,9 @@ export function columns(): ColumnDef<TransactionHistoryRow>[] {
       ),
       cell: ({ row }) => (
         <div className="flex items-center truncate w-fit justify-between">
-          <span className="mr-2">{formatAddress(row.original.params_user)}</span>
+          <span className="mr-2">{formatAddress(row.original.user)}</span>
           <button
-            onClick={() => copyToClipboard(row.original.params_user)}
-            aria-label="Copy to clipboard"
-            className="text-gray-500 hover:text-gray-700 focus:outline-none"
-          >
-            <Copy size={16} />
-          </button>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "requestOfframpId",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Request ID"
-        />
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center truncate w-fit justify-between">
-          <span className="mr-2">{formatAddress(row.original.requestOfframpId)}</span>
-          <button
-            onClick={() => copyToClipboard(row.original.requestOfframpId)}
+            onClick={() => copyToClipboard(row.original.user)}
             aria-label="Copy to clipboard"
             className="text-gray-500 hover:text-gray-700 focus:outline-none"
           >
